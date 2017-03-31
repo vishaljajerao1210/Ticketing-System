@@ -1,0 +1,334 @@
+<style>
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>.active>a,
+	.dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus {
+	color: #262626;
+	text-decoration: none;
+	background-color: #eee;
+}
+
+strong {
+	color: #bf1e1e;
+}
+
+dt {
+	text-align: left !important;
+}
+</style>
+<div ng-controller="workflowController">
+	<div class="col-md-10">
+		<div class="row padding-md border-bottom">
+				<div class="col-md-12">
+					<div class="row">
+					<div class="form-inline col-md-8">
+						<label for="userName" class="control-label"> Sub Domain :</label>
+						<input name="selectedSubDomain" ng-model="selectedSubDomain" style="width:86%"
+							typeahead-editable="false" typeahead-min-length="1"
+							typeahead-on-select="fetchDispositions.setDispositions()"
+							typeahead-template-url="customTemplate.html"
+							placeholder="Start typing to select sub-domain.."
+							autocomplete="off" uib-typeahead="x as x.subDomainDescription for x in fetchDataForAutoComplete.getSubDomainsByCategory($viewValue)"
+							class="form-control" >
+					</div>
+					<div class="col-md-4" ng-class="isInvalid('actionName',dispositionForm)">
+							<button data-toggle="modal" class="pull-right no-outline btn btn-link no-padding" href="" ng-click="addDisposition()" ng-disabled="!selectedSubDomain"
+						data-target="#addDisposition"><i class="material-icons font-xlg">add_box</i> Add Disposition</button>
+					</div>
+					</div>
+				</div>
+				<div class="col-md-8" ng-show="selectedSubDomain">
+					<dl class="dl-horizontal clearfix padding-top-md padding-left-md padding-right-md no-margin">
+						<div class="pull-left">
+							<dt>Category :</dt>
+							<dd>{{selectedSubDomain.domains.categories.categoryDescription}}</dd>
+							<dt>Domain:</dt>
+							<dd>{{selectedSubDomain.domains.domainDescription}}</dd>
+						</div>
+						<div class="pull-right">
+							<dt>Default Expert Type:</dt>
+							<dd>{{selectedSubDomain.actorType}}</dd>
+							<dt>Default Expert :</dt>
+							<dd>{{selectedSubDomain.defaultExpert.userName}}
+								{{selectedSubDomain.defaultUserGroup.groupName}}</dd>
+						</div>
+					</dl>
+				
+				</div>
+		</div>
+		<div ng-show="!selectedSubDomain || dispositions.length==0" class="no-items-container margin-top-lg" role="alert">
+			<div class="no-items">
+			<span ng-if="!selectedSubDomain">Select Sub-Domain to view dispositions</span>
+			<span ng-if="selectedSubDomain && dispositions.length==0">No workflow configured yet
+				<div class="font-small text-center">Click on "Add Disposition" to add one</div>
+			</span>
+			</div>
+		</div>
+	
+		<table ng-if="selectedSubDomain && dispositions && dispositions.length!=0"
+			class="table table-hover pull-left borderize bleach-background margin-top-lg">
+			<thead>
+				<th>Action</th>
+				<th>Status</th>
+				<th>Current User/Group</th>
+				<th>Next User/Group</th>
+				<th class="text-center">Flow Ends</th>
+				<th>Active</th>
+				<th></th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="disposition in dispositions">
+					<td>{{disposition.actionName}}</td>
+					<td>{{disposition.currentStatus.statusName}}</td>
+					<td><i class="material-icons font-lg text-dark" style="top:3px">{{disposition.isCurrentGroup ? 'group' : 'person'}}</i>
+						 {{disposition.currentAssignedUser.userName}} {{disposition.currentAssignedGroup.groupName}}</td>
+					<td><span ng-if="disposition.nextUser.userName != null || disposition.nextUserGroup.groupName != null">
+						<i class="material-icons font-lg text-dark" style="top:3px">{{disposition.isNextGroup ? 'group' : 'person'}}</i>
+						 {{disposition.nextUser.userName}} {{disposition.nextUserGroup.groupName}}</span>
+						 <span ng-if="disposition.nextUser.userName == null && disposition.nextUserGroup.groupName == null"><i class="material-icons md-18" style="font-size:13px;">remove</i></span></td>
+					<td class="text-center"><i class="material-icons font-small" ng-class="{'text-error' : disposition.isTerminal, 'text-gray' : !disposition.isTerminal}">fiber_manual_record</i></td>	
+						<td><label class="toggle-switch">
+  <input type="checkbox" ng-model="disposition.isShowToUser"   data-target="#activate" ng-click="toggleStatus(disposition)" data-toggle="modal"  >
+  <div class="slider round"></div>
+</label></td>
+					<td><a role="button" href="" data-toggle="modal" ng-click="editData(disposition, true)"
+						data-target="#addDisposition"><i class="material-icons font-lg text-dark">launch</i></a>
+					</td>
+					<td><a href="" data-toggle="modal" ng-click="editData(disposition, false)"
+						data-target="#addDisposition"><i class="material-icons md-18 text-dark">edit</i></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+<div ng-show="dispositions.length>=0">
+			<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="pageRequest.maxSize" ng-model="pageRequest.currentPage" ng-change="pageRequest.setPage()"
+				class="pagination-sm no-margin bleach-background borderize" items-per-page="pageRequest.pageSize" ng-show="showPagination" >
+				</pagination>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="addDisposition" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="pull-right">
+
+					<a href="" ng-click="editData(dispositionItem, false)" class="margin-right-sm">
+						<i class="material-icons md-18 text-dark">edit</i></a>
+					</div>
+					<h4 class="modal-title" id="myModalLabel">Disposition</h4>
+				</div>
+				<div class="modal-body">
+					
+					<form class="clearfix" class="form-horizontal" name="dispositionForm" novalidate>
+						<div class="row padding-btm-lg">
+							<div class="col-md-4" ng-class="isInvalid('actionName',dispositionForm)">
+								<label class="control-label">Action</label>
+								
+						<span ng-show="dispositionForm.$submitted && dispositionForm.actionName.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Action Name is required !" popover-trigger="mouseenter">
+						</span>
+						<input type="text" class="form-control" ng-disabled="isView" placeholder="Displayed as option name"
+									name="actionName" ng-model="dispositionItem.actionName"
+									ng-required="true">
+							</div>
+
+							<div class="col-md-4" ng-class="isInvalid('status',dispositionForm)">
+								<label class="control-label">Status to be Set</label>
+								<span ng-show="dispositionForm.$submitted && dispositionForm.status.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Status is required !" popover-trigger="mouseenter">
+						</span> 
+								<select class="form-control" ng-disabled="isView" 
+									ng-options="status as status.statusName for status in statuses track by status.id"
+									name="status" ng-model="dispositionItem.currentStatus"
+									ng-required="true">
+									<option value="" disabled selected hidden>Please
+										Choose...</option>
+								</select>
+							</div>
+
+							<div class="col-md-4" ng-class="isInvalid('isTerminal',dispositionForm)">
+								<label class="control-label">Terminate Workflow</label> 
+								<span ng-show="dispositionForm.$submitted && dispositionForm.isTerminal.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Choose whether to end Workflow" popover-trigger="mouseenter">
+						</span>
+						<select class="form-control" ng-disabled="isView" 
+									name="isTerminal" ng-model="dispositionItem.isTerminal" ng-options="o.value as o.label for o in options.isTerminal"
+									ng-required="true">
+								<option value="" disabled selected hidden>Please
+										Choose...</option>
+								</select>
+							</div>
+						</div>
+						<div class="row padding-btm-lg" ng-switch="dispositionItem.isCurrentGroup">
+							<div class="col-md-4" ng-class="isInvalid('isCurrentGroup',dispositionForm)">
+								<label class="control-label">Current User/Group</label>
+								<span ng-show="dispositionForm.$submitted && dispositionForm.isCurrentGroup.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Choose User/Group" popover-trigger="mouseenter">
+						</span>
+								 <select class="form-control" ng-disabled="isView || isFirst"  ng-options="o.value as o.label for o in options.isGroup"
+									name="isCurrentGroup" ng-model="dispositionItem.isCurrentGroup"
+									ng-required="true">
+									<option value="" disabled selected hidden>Please
+										Choose...</option>
+								</select>
+							</div>
+							<div class="col-md-4" ng-class="isInvalid('currentAssignedUser',dispositionForm)" ng-switch-when="false">
+								<label class="control-label">Current User</label> 
+								<span ng-show="dispositionForm.$submitted && dispositionForm.currentAssignedUser.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="User is required !" popover-trigger="mouseenter">
+						</span>
+						<input name="currentAssignedUser"
+									ng-model="dispositionItem.currentAssignedUser"
+									typeahead-editable="false" typeahead-min-length="1"
+									placeholder="Start typing to select user.."
+									autocomplete="off" uib-typeahead="x as x.userName for x in fetchUserInformation.getUsers($viewValue)"
+									class="form-control" ng-disabled="isView || isFirst" 
+									ng-required="!dispositionItem.isCurrentGroup" />
+							</div>
+
+							<div class="col-md-4" ng-class="isInvalid('currentAssignedGroup',dispositionForm)" ng-switch-when="true">
+								<label class="control-label">Current Group</label>
+								<span ng-show="dispositionForm.$submitted && dispositionForm.currentAssignedGroup.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Group is required !" popover-trigger="mouseenter">
+						</span>
+						 <input name="currentAssignedGroup"
+									ng-model="dispositionItem.currentAssignedGroup"
+									typeahead-editable="false" typeahead-min-length="1"
+									placeholder="Start typing to select group.."
+									autocomplete="off" uib-typeahead="x as x.groupName for x in fetchUserInformation.getGroups($viewValue)"
+									class="form-control" ng-disabled="isView || isFirst" 
+									ng-required="dispositionItem.isCurrentGroup" />
+							</div>
+						</div>
+						<div class="row padding-btm-lg" ng-if="!dispositionItem.isTerminal" ng-switch="dispositionItem.isNextGroup">
+							<div class="col-md-4" ng-class="isInvalid('isNextGroup',dispositionForm)">
+								<label class="control-label">Assign to User/Group</label>
+								<span ng-show="dispositionForm.$submitted && dispositionForm.isNextGroup.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Choose User/Group" popover-trigger="mouseenter">
+						</span>
+						 <select class="form-control" ng-disabled="isView"  ng-options="o.value as o.label for o in options.isGroup"
+									name="isNextGroup" ng-model="dispositionItem.isNextGroup"
+									ng-required="!dispositionItem.isTerminal">
+									<option value="" disabled selected hidden>Please
+										Choose...</option>
+								</select>
+							</div>
+							<div class="col-md-4" ng-class="isInvalid('nextUser',dispositionForm)"
+								ng-switch-when="false">
+								<label class="control-label">Assign to User </label>
+								<span ng-show="dispositionForm.$submitted && dispositionForm.nextUser.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="User is required !" popover-trigger="mouseenter">
+						</span>
+						 <input name="nextUser"
+									ng-model="dispositionItem.nextUser" typeahead-editable="false"
+									typeahead-min-length="1"
+									placeholder="Start typing to select user.."
+									autocomplete="off" uib-typeahead="x as x.userName for x in fetchUserInformation.getUsers($viewValue)"
+									class="form-control" ng-disabled="isView" 
+									ng-required="!dispositionItem.isNextGroup && !dispositionItem.isTerminal" />
+							</div>
+							<div class="col-md-4" ng-class="isInvalid('nextUserGroup',dispositionForm)"
+								ng-switch-when="true">
+								<label class="control-label">Assign to Group</label>
+								<span ng-show="dispositionForm.$submitted && dispositionForm.nextUserGroup.$invalid"
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Group is required !" popover-trigger="mouseenter">
+						</span>
+						 <input name="nextUserGroup"
+									ng-model="dispositionItem.nextUserGroup"
+									typeahead-editable="false" typeahead-min-length="1"
+									placeholder="Start typing to select group.."
+									autocomplete="off" uib-typeahead="x as x.groupName for x in fetchUserInformation.getGroups($viewValue)"
+									class="form-control" ng-disabled="isView" 
+									ng-required="dispositionItem.isNextGroup && !dispositionItem.isTerminal" />
+							</div>
+						</div>
+					
+					</form>
+				</div>
+				<div class="modal-footer">
+				<input ng-if="!isView" type="submit" class="btn btn-primary" ng-click="saveDisposition()" value="Save" data-loading-text="Saving.." >
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{isView ? 'Close' : 'Cancel'}}</button>	
+					
+				</div>	
+				
+			</div>
+		</div>
+	</div>
+
+
+<div class="modal in" id="activate" role="dialog" data-backdrop="static">
+		<div class="modal-dialog " role="document">
+
+			<div class="modal-content">
+				<div class="modal-header font-lg text-strong">
+					Confirmation
+				</div>
+				<div class="modal-body">
+					<span class="modal-title" id="myModalLabel" ng-if="!getStatus()">Are you sure
+							you want to deactivate the dispositioning ?</span>
+							<span class="modal-title" id="myModalLabel" ng-if="getStatus()">Are you sure
+							you want to activate the dispositioning ?</span>
+				</div>
+				<div class="modal-footer">
+					<div class="input-group pull-right">
+						<button type="button" class="btn btn-primary" data-loading-text="Sending..." ng-click="updateRecord(false)">Yes</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="fetchDispositions.setDispositions()">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+</div>
+<script type="text/ng-template" id="customTemplate.html">
+  <a>
+      <div class="border-bottom padding-btm-sm padding-top-sm clearfix"><div class="text-strong pull-left" ng-bind-html="match.label | uibTypeaheadHighlight:query"></div>
+	  <span class="label label-default pull-right" ng-if="match.model.noDispositions" style="background-color: #999;" >No Dispositions</span></div>
+	<div class="dl-horizontal font-small padding-sm">
+		<div class="half-width inline-block overflow-hidden">
+		<dt>Category :</dt><dd> {{match.model.domains.categories.categoryDescription}}</dd>
+		<dt>Domain : </dt><dd>{{match.model.domains.domainDescription}}</dd></div>
+		<div class="half-width inline-block overflow-hidden">
+		<dt>Default Expert Type :</dt><dd> {{match.model.actorType}}</dd>
+		<dt>Default Expert :</dt><dd> {{match.model.defaultExpert.userName}} {{match.model.defaultUserGroup.groupName}}</dd>
+		</div>
+	</div>
+<div style="clear:both"></div>
+  </a>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

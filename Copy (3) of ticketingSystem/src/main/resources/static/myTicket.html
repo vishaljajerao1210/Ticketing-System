@@ -1,0 +1,69 @@
+<div ng-controller="ticketcontroller">
+	<div ng-class="{'container': !viewDetails, 'container-fluid' : viewDetails}" class="margin-top-lg">
+
+		<div ng-hide="!search.isSearched && (viewDetails || tickets.length==0)">
+			<search-template search-obj="search" get-data="listTickets()"></search-template>
+		</div>
+
+		<div ng-show="search.isSearched && tickets.length ==0 " class="no-items-container margin-top-lg " role="alert">
+			<div class="no-items"><i class="material-icons">info</i>
+				<span> No results found</span>
+			</div>
+		</div>
+
+		<div ng-hide="viewDetails">
+
+			<div ng-show="!search.isSearched && tickets.length ==0 " class="no-items-container margin-top-lg " role="alert" style="height:550px;background-color: transparent;">
+				<div class="no-items text-center">
+					<div><i class="material-icons md-48">lightbulb_outline</i></div>
+					<div> No tickets submitted yet !</div>
+					<div class="font-small">They appear here when you raise one</div>
+					<div><a ui-sref="/raisenewticket" class="btn btn-success no-border font-small margin-md">Raise Ticket</a></div>
+				</div>
+			</div>
+
+
+			<table ng-hide="tickets.length==0" class="table table-hover table-responsive pull-left borderize bleach-background margin-top-lg">
+				<thead>
+					<th>Ticket No.</th>
+					<th>Category</th>
+					<th>Ticket Status</th>
+					<th>Raised On</th>
+					<th>Current Status</th>
+					<th></th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="ticket in tickets">
+						<td class="text-strong"># {{ticket.id}}</td>
+						<td>{{ticket.categories.categoryDescription}}</td>
+						<td><i ng-class="{'material-icons font-small' : true, 'text-error': ticket.status=='Pending', 'text-success': ticket.status=='Closed' }"
+								style="top: 2px;">fiber_manual_record</i> {{ticket.status}}
+						</td>
+						<td>{{ticket.raisedDate| date : "dd'th' MMM, yyyy h:mm a"}}</td>
+						<td>{{ticket.currentStatus}}</td>
+						<td><a role="button" href="#/mytickets/{{ticket.id}}">View</a> </td>
+					</tr>
+				</tbody>
+			</table>
+			<div ng-hide="tickets.length==0">
+				<uib-pagination  force-ellipses="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true" max-size="maxSize" ng-model="currentPage" ng-change="setPage()"
+					class="pagination-sm pull-right no-margin bleach-background borderize"  items-per-page="pageSize" ng-show="showPagination">
+					</pagination>
+			</div>
+			<div class="pull-left form-inline" ng-hide="tickets.length==0">
+				<label>Size: </label><select class="form-control input-sm" name="pageSize" ng-model="pageSize" ng-change="setSize(pageSize)">
+							<option ng-repeat="p in pageSizeOptions" value="{{p}}"  >
+								{{p}}</option>
+						</select>
+			</div>
+		</div>
+
+
+		<div ng-show="viewDetails">
+
+			<common-template previous-page-link="mytickets"></common-template>
+
+		</div>
+
+	</div>
+</div>

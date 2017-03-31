@@ -1,0 +1,166 @@
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 1px;
+    cursor: pointer;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 1px;
+    cursor: pointer;
+}
+.fileUpload input.upload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+     font-family: Calibri;
+}
+
+.tfile-uploaded-success{
+    color: #15c;
+    cursor: pointer;
+    text-decoration: none;
+	font-weight: bold;
+} 
+
+.tfile-uploaded-success a:hover{
+    text-decoration: none;
+}
+
+
+.t-file-upload-rows{
+    display:block;
+    position:relative;
+    width:100%;
+    overflow: hidden;
+    margin-bottom:10px;
+}
+.t-file-upload-row{
+    position:relative;
+    display:block; 
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    padding :5px;
+    margin:2px 0 2px 0;
+   
+}
+.t-upload-file{
+    display:inline-block;
+    
+}
+.t-upload-filename{
+    width:60%
+}
+
+.t-upload-file{
+    display:inline-block;
+    
+}
+
+.t-file-progress{
+    width: 20%;
+}
+
+.inline {
+    display:inline-block;
+}
+
+.filelist {
+	overflow-y: auto;
+	height: 150px;
+	width: 100%;
+	overflow-x: hidden;
+}
+
+
+.filelist::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.filelist::-webkit-scrollbar {
+	width: 7px;
+	margin-left: -12px;
+}
+
+.filelist::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	background-color: black;
+}
+
+ .filelist::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.filelist::-webkit-scrollbar {
+	width: 7px;
+	margin-left: -12px;
+}
+
+.filelist::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+	background-color: black;
+}
+
+tags-input .tags {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    padding: 1px;
+    overflow: hidden;
+    word-wrap: break-word;
+    cursor: text;
+    background-color: #fff;
+    border: 1px solid #a9a9a9;
+    box-shadow: 1px 1px 1px 0 #d3d3d3 inset;
+    height: 100%;
+}
+
+tags-input .tags
+{
+	border-style: solid;
+    size: 88;
+    border-radius: 0px !important;
+    height: 32px !important;
+    
+}
+
+tags-input .tags {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -moz-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+tags-input *, tags-input :after, tags-input :before {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+ .custom-checkbox{
+min-height: 20px;
+   padding-left: 0px;
+   margin-bottom: 0px;
+   cursor: pointer
+}
+.checkboxcolumn {
+    width: 55%;
+}

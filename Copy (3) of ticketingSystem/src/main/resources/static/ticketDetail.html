@@ -1,0 +1,178 @@
+	<div class="row padding-sm margin-btm-lg bleach-background borderize" >
+	<a role="button" class="btn btn-link" href="#{{previousPageLink}}"><i style="top: 3px;" class="material-icons">chevron_left</i></a>
+	<div class="pull-right" ng-hide="currentTab == 'completedTasks'">
+
+		<button class="btn btn-link border-left btn-lg" ng-repeat="option in expertOptions" ng-show="option.isShowToUser && showExpertOptions()&& isCurrentUrl('/personaltasks/:id')" data-target="#commentModal" ng-click="setStatus(option.currentStatus.code)"
+			data-toggle="modal"><i class="material-icons font-lg" ng-style="getIconStyle(option.currentStatus.code)" style="top:3px">{{getIconForActivity(option.currentStatus.code, true)}}</i>  {{option.actionName}} 
+						</button>
+
+		<button class="btn btn-link border-left btn-lg" ng-if="ticketDetails.isCurrentGroup && !ticketDetails.isClaimed && isCurrentUrl('/myactionables/:id')" data-target="#commentModal" ng-click="setStatus('STS08')"
+			data-toggle="modal">
+			<i class="material-icons md-18 text-dark" style="top:4px">archive</i> Claim
+					</button>
+		<button ng-if="ticketDetails.isCurrentGroup && ticketDetails.isClaimed&& isCurrentUrl('/personaltasks/:id')" 
+		class="btn btn-link border-left btn-lg" data-toggle="modal" data-target="#commentModal" ng-click="setStatus('STS12')">
+		<i class="material-icons md-18 text-dark"  style="top:4px">unarchive</i> Revoke
+				</button>
+	
+		
+						
+						
+		<span ng-if="!ticketDetails.isExpertTask && ticketDetails.currentStatus != 'Sent For Clarification' && $root.response.username == ticketDetails.currentExpert.userName">
+				<button data-target="#commentModal" class="btn btn-link border-left btn-lg" ng-click="setStatus('STS01')"
+					data-toggle="modal">
+				<i class="material-icons font-lg" ng-style="getIconStyle('STS01')" style="top:3px">{{getIconForActivity('STS01')}}</i> Approve
+		</button>
+		<button data-toggle="modal" class="btn btn-link border-left btn-lg" data-target="#commentModal" ng-click="setStatus('STS02')">
+					<i class="material-icons font-lg" ng-style="getIconStyle('STS02')" style="top:3px">{{getIconForActivity('STS02')}}</i> Reject
+				</button>
+		<button data-toggle="modal" data-target="#commentModal"class="btn btn-link border-left btn-lg" ng-click="setStatus('STS03')">
+<i class="material-icons font-lg" ng-style="getIconStyle('STS03')"  style="top:3px">{{getIconForActivity('STS03')}}</i> Send For
+					Clarification
+				</button>
+		</span>
+		<div  ng-show="!ticketDetails.isExpertTask && ticketDetails.currentStatus == 'Sent For Clarification' && ticketDetails.raisedBy.userName == ticketDetails.currentExpert.userName">
+		<button class="btn btn-link border-left btn-lg" data-toggle="modal" data-target="#commentModal" ng-click="setStatus('STS04')">
+					<i class="material-icons md-18 text-dark" >playlist_add_check</i> Clarify
+				</button>
+	</div>
+	</div>
+
+</div>
+<div class="row">
+	<div class="col-md-9">
+		<div class="bleach-background overflow-hidden borderize">
+			<div class="border-bottom font-md padding-sm overflow-hidden margin-left-sm margin-right-sm"><i class="material-icons md-18 margin-right-sm text-dark" style="top:4px;">featured_play_list</i> Ticket Details
+			<button class="btn btn-link pull-right border-left" data-toggle="modal" style="padding: 2px 12px;" data-target="#fileModal">Attachments 
+				<span class="badge bg-primary font-xs">{{files.length}}</span>
+			</button>
+			</div> 
+			<div class="col-md-6 padding-md">
+				<dl class="dl-horizontal no-margin">
+  	<dt>Ticket No. :</dt><dd>#{{ticketDetails.id}}</dd>
+   	<dt>Category :</dt><dd>{{ticketDetails.categories.categoryDescription}}</dd>
+    <dt>Domain : </dt><dd>{{ticketDetails.domains.domainDescription}}</dd>
+	<dt>Sub-Domain :</dt><dd>{{ticketDetails.subdomain.subDomainDescription}}</dd>
+	<dt>Raised On:</dt><dd><i class="material-icons md-18">date_range</i> {{ticketDetails.raisedDate | date : "dd'th' MMM, yyyy h:mm a"}}</dd>
+				</dl>
+			</div>
+			<div class="col-md-6 padding-md">
+				<dl class="dl-horizontal no-margin">
+  	<dt>Ticket Status :</dt><dd><i ng-class="{'material-icons font-small' : true, 'text-error': ticketDetails.status=='Pending', 'text-success': ticketDetails.status=='Closed' }" style="top: 2px;">fiber_manual_record</i> {{ticketDetails.status}}</dd>
+   	<dt>Current Status :</dt><dd>{{ticketDetails.currentStatus}}</dd>
+    <dt>Requestor :</dt><dd>{{ticketDetails.raisedBy.userName}}</dd>
+	<dt>Assigned To :</dt><dd>{{ticketDetails.currentExpert.userName == null ? '-' : ticketDetails.currentExpert.userName}}</dd>
+	<dt>Group :</dt><dd><i ng-if="ticketDetails.currentGroupMaster!=null" class="material-icons md-18">group</i> {{ticketDetails.currentGroupMaster==null ? '-' : ticketDetails.currentGroupMaster.groupName}}</dd>
+				</dl>
+			</div>
+		</div>
+		<div class="bleach-background overflow-hidden borderize margin-top-lg">
+			<div class="border-bottom font-md  margin-left-sm padding-sm">
+			<i class="material-icons md-18 margin-right-sm">format_list_bulleted</i> Details</div>
+
+			<div ng-show="fields.length ==0" class="no-items-container">
+		<div class="no-items"> No Details Provided </div>
+	</div>
+	<div class="col-md-6 padding-md">
+				<dl class="dl-horizontal no-margin">
+					<span ng-repeat="field in fields" ng-if="$even" >
+						<dt>{{field.fieldName}} :</dt><dd>{{field.value}}</dd>
+					</span>
+				</dl>
+	</div>
+	<div class="col-md-6  padding-md">
+				<dl class="dl-horizontal no-margin">
+					<span ng-repeat="field in fields" ng-if="$odd">
+						<dt>{{field.fieldName}} :</dt><dd>{{field.value}}</dd>
+					</span>
+				</dl>
+	</div>
+		</div>
+	<div class="bleach-background padding-sm overflow-hidden margin-top-lg borderize">
+		<div class="border-bottom font-md padding-btm-sm margin-left-sm margin-right-sm">
+			<i class="material-icons md-18 margin-right-sm">comment</i> Comments</div>
+	<div ng-show="taskComments.length ==0 " class="no-items-container" role="alert" >
+					<div class="no-items">No Comments yet</div>
+				</div>
+	<div class="padding-top-md padding-btm-md padding-left-lg padding-right-lg" ng-class="{'border-bottom' : !$last}" ng-repeat="taskComment in taskComments">
+		<div class="margin-btm-sm">
+			<span class="text-strong text-capitalize">{{taskComment.assignedTo.userName}} - {{taskComment.approverType}}</span>
+			<span class="font-small text-gray pull-right">{{taskComment.actionDate | date : "dd'th' MMM, yyyy h:mm a"}}</span></div>
+		{{taskComment.comments}}
+	</div>
+	</div>
+	</div>
+	<div class="col-md-3">
+		<div class="bleach-background borderize">
+		<div class="padding-sm font-md border-bottom margin-left-sm"><i class="material-icons md-18 margin-right-sm" style="top:4px">history</i>Activity</div>
+		<div class="approval-history">
+			<ul ng-repeat="approval in approvalHistory" class="no-padding no-margin">
+			<i class="material-icons" ng-style="getIconStyle(approval.code)">{{getIconForActivity(approval.code, false)}}</i>
+			<li><div class="timeline" ng-if="!$last"></div>
+				<div class="" >{{approval.statement}}</div>
+				<div class="font-xs text-gray">{{approval.date | date: "dd'th' MMM, yyyy h:mm a"}}</div></li>
+			</ul>
+		</div>
+	</div>
+	</div>
+</div>
+
+
+			<div class="modal in" id="commentModal" role="dialog" >
+	<div class="modal-dialog" style="width:35%" role="document">
+
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+					<span class="text-strong font-md">Add Comment</span>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+				<label class="text-strong">Comment:</label>
+				<textarea class="form-control input-sm" name="comments" ng-model="comments"></textarea>
+				</div>
+			</div>
+				
+			<div class="modal-footer">
+						<div class="input-group pull-right">
+						<button type="button" class="btn btn-primary" ng-click="submitRequest()">Submit</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal in" id="fileModal" role="dialog" >
+	<div class="modal-dialog" role="document">
+
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+					<span class="text-strong font-md">Files Attached</span>
+			</div>
+			<div class="modal-body">
+
+			<div ng-show="files.length==0" class="no-items-container" role="alert" data-original-title="" title="">
+<div class="no-items"> No files attached</div>			</div>
+<table class="table table-hover" ng-show="files.length>0">
+	<tbody>
+	<tr ng-repeat="file in files">
+		<td class="text-strong padding-md">{{file.fileName}}</td>
+		<td class="text-center padding-md">{{file.uploadedDate | date : "dd'th' MMM, yyyy"}} {{file.uploadedTime}}</td>
+		<td class="text-right padding-sm"><a href="" ng-click="downloadfile(file.fileName,file.fileupload.id)" ><i class="material-icons md-18 text-gray">file_download</i> </a></td>
+		<td class="text-right padding-sm"><a href=""   ><i class="material-icons md-18 text-gray">delete</i> </a></td>
+	</tr>
+	</tbody>
+		
+</table>	
+</div>
+			<div class="modal-footer">
+				<upload files="files" multiple="true" class=""></upload>
+						<div class="input-group pull-right">
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

@@ -1,0 +1,70 @@
+<div ng-controller="actionablescontroller" class="margin-top-lg container-fluid">
+	<div ng-hide="viewDetails">
+		<div class="col-md-2 margin-btm-lg">
+			<ul class="nav nav-pills nav-stacked bleach-background borderize subtle-shadow" id="groupTab">
+				<li ng-repeat="group in groups" ng-class="{'active': setActive(group.id)}" >
+					<a data-toggle="tab" href="" ng-click="selected(group.id)" class="" data-target="#{{group.id}}">{{group.groupName}}
+<span class="badge bg-primary font-xs pull-right">{{showCount(group.groupName)}}</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div ng-hide="viewDetails">
+		<div class="col-md-10" id="{{currentGroup}}">
+
+
+			<div ng-hide="!search.isSearched && (viewDetails||groupTasks.length ==0)">
+				<search-template search-obj="search" get-data="getGroupTasksByGroup()"></search-template>
+			</div>
+
+			<div ng-show="groupTasks.length==0 " class="no-items-container" role="alert">
+					<div class="no-items"><i class="material-icons">{{search.isSearched? 'info' : 'inbox'}}</i>
+					<span ng-if="!search.isSearched"> Empty Bucket ! </span>
+					<span ng-if="search.isSearched"> No results found</span>
+					</div>
+			</div>
+			<table ng-hide="groupTasks.length==0" class="table table-hover borderize bleach-background table-responsive margin-top-lg">
+				<thead>
+					<th>Ticket No.</th>
+					<th>Category</th>
+					<th>Requestor</th>
+					<th>Assigned On</th>
+					<th>Status</th>
+					<th></th>
+				</thead>
+				<tbody ng-repeat="ticket in groupTasks">
+					<td>{{ticket.id}}</td>
+					<td>{{ticket.categories.categoryDescription}}</td>
+					<td>{{ticket.raisedBy.userName}}</td>
+					<td>{{ticket.assignedOn| date : "dd'th' MMM, yyyy h:mm a"}}</td>
+					<td>{{ticket.currentStatus}}</td>
+					<td><a role="button" href="#/myactionables/{{ticket.id}}">View</a>
+				</tbody>
+			</table>
+
+
+			<div class="pull-right" ng-hide="groupTasks.length==0||viewDetails">
+				<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" 
+				ng-show ="showPagination" ng-change="setPage()" class="pagination-sm pull-right no-margin bleach-background borderize" items-per-page="pageSize">
+					</pagination>
+			</div>
+			<div class="pull-left form-inline" ng-hide="groupTasks.length==0||viewDetails">
+				<label>Size: </label> <select class="form-control input-sm" name="pageSize" ng-model="pageSize" ng-change="setSize(pageSize)">
+							<option ng-repeat="p in pageSizeOptions" value="{{p}}"  >
+								{{p}}</option>
+						</select>
+
+
+			</div>
+
+		</div>
+	</div>
+
+	<div ng-show="viewDetails">
+		<common-template previous-page-link="myactionables"></common-template>
+	</div>
+
+
+</div>

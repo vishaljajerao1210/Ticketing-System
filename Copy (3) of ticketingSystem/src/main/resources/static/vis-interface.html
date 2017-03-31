@@ -1,0 +1,212 @@
+<div style = "height:100%;">
+	<style>
+		#contextMenu {
+			position: absolute;
+			display:none;
+		}
+	</style>
+<vis-network data="data"></vis-network>
+
+		<!--Node Modal-->
+
+		<div class="modal fade" id="visNodeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" display="block">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<h4 class="col-md-12 pull-left">Node Information</h4>   
+							
+						</div>
+					</div>
+					<div class="modal-body">
+						<div class="panel panel-default" ng-show="!isEdit">
+							<div class="panel-heading">Added Actions</div>
+							<div class="panel-body">
+								<div  ng-show="addedActions.length!=0 ">
+									<table class="table table-striped table-hover table-condensed  table-bordered">
+										<tbody>
+											<tr ng-repeat="elem in addedActions">
+												<td><label>Label</label></td>
+												<td>{{elem.label}}</td>
+												<td>
+													<a type="button" class="btn btn-sm pull-right" ng-click="removedAddedAction($index)">
+														<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+													</a>
+												</td>
+											</tr>								
+										</tbody>
+									</table>
+								</div>
+								<div ng-show="addedActions.length==0">
+									<div class="alert alert-info" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;&nbsp;No 
+										New Actions defined yet!
+									</div>
+								</div>
+							
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Add New Actions
+							<a type="button" class="btn btn-sm pull-right" ng-click="addNode('visNodeModal')" ng-hide="isEdit">Add</a>  </h3>
+							</div>
+							<div class="panel-body">
+								<table class="table table-striped table-hover table-condensed trex-table " ng-show="myInfo.length!=0 ">
+									<tbody>
+										<tr>
+											<td><label>Label</label></td>
+											<td><input type="text" ng-model="curObj.label"/></td>
+										</tr>
+										<tr>
+											<td><label>Actor Type</label></td>
+											<td><input type="text" ng-model="curObj.type"/></td>
+										</tr>
+										<tr>
+											<td><label>Status</label></td>
+											<td><input type="text" ng-model="curObj.status"/></td>
+										</tr>
+										<!--<tr ng-show="isEdit" >
+											<td><label>From</label></td>
+											<td>
+												<select ng-options="item.id as item.label for item in actions.nodes" ng-model="edge.from">
+													<option value="{{curObj.id}}">{{curObj.label}}<option>
+												</select>
+											</td>
+										</tr>
+										<tr ng-show="isEdit" >
+											<td><label>To</label></td>
+											<td>
+												<select ng-options="item.id as item.label for item in actions.nodes" ng-model="edge.to">
+													<option value="{{curObj.id}}">{{curObj.label}}<option>
+												</select>
+											</td>
+										</tr>-->
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						
+						
+					</div>
+					<div class="modal-footer">
+						<div class="pull-right">
+							<button type="button" class="btn btn-default" ng-click="removeModal('visNodeModal')">Close</button>
+							<button type="button" class="btn btn-default" ng-click="removeNode('visNodeModal',curObj.id)">Delete</button>
+						</div>
+						<div class="pull-left">
+							<button type="button" class="btn btn-default" ng-click="submitNodes('visNodeModal')">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--Edge Modal-->
+
+		<div class="modal fade" id="visEdgeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" display="block">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="row">
+							<h4 class="col-md-12 pull-left">Node Information</h4>     
+						</div>
+					</div>
+					<div class="modal-body">
+
+						<div class="panel panel-default" ng-show="!isEdit">
+							<div class="panel-heading">Added Actions</div>
+							<div class="panel-body">
+								<div  ng-show="addedEdges.length!=0 ">
+									<table class="table table-striped table-hover table-condensed  table-bordered">
+										<tbody>
+											<tr>
+												<td>From</td>
+												<td>To</td>
+												<td></td>
+											</tr>
+											<tr ng-repeat="elem in addedEdges">
+												<td><label>{{elem.from.label}}</label></td>
+												<td>{{elem.to.label}}</td>
+												<td>
+													<a type="button" class="btn btn-sm pull-right" ng-click="removedAddedEdges($index)">
+														<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+													</a>
+												</td>
+											</tr>								
+										</tbody>
+									</table>
+								</div>
+								<div ng-show="addedEdges.length==0">
+									<div class="alert alert-info" role="alert">
+										<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;&nbsp;No 
+										New Actions defined yet!
+									</div>
+								</div>
+							
+							</div>
+						</div>
+
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Add New Actions
+							<a type="button" class="btn btn-sm pull-right" ng-click="addEdge('visEdgeModal')" ng-hide="isEdit">Add</a>  </h3>
+							</div>
+							<div class="panel-body">
+								<table class="table table-striped table-hover table-condensed trex-table " class="col-md-6" ng-show="myInfo.length!=0 ">
+									<tbody>
+										<tr>
+											<td>
+												<label>From</label>
+											</td>
+											<td>
+												{{edge.from.label}}
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<label>To</label>
+											</td>
+											<td>
+													<select ng-options="item as item.label for item in data.nodes" ng-model="edge.to">
+													</select>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						
+					</div>
+					<div class="modal-footer">
+						<div class="pull-right">
+							<button type="button" class="btn btn-default" ng-click="removeModal('visEdgeModal')">Close</button>
+						</div>
+						<div class="pull-left">
+							<button type="button" class="btn btn-default" ng-click="submitEdges('visEdgeModal')">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<ul id="contextMenu" class="dropdown-menu" role="menu">
+    <li><a tabindex="-1" ng-show="isNode" type="button" data-toggle="modal" ng-click="addActions()" data-target="#visNodeModal">Add Actions</a></li>
+    <li><a tabindex="-1" ng-show="isNode && isNodeValid" data-toggle="modal" data-target="#visNodeModal" ng-click="setNode()">Edit Actions</a></li>
+    <li><a tabindex="-1" ng-show="isNode" data-toggle="modal" data-target="#visEdgeModal" ng-click="setEdge()">Edit Edge</a></li>
+    <li><a tabindex="-1" ng-show="isEdge && !isNode" ng-click="removeEdge()">Remove Edge</a></li>
+	<li class="divider" ng-show="isNode && isNodeValid" ></li>
+    <li><a tabindex="-1" ng-show="isNode && isNodeValid" ng-click="endAction()">End Flow</a></li>
+</ul>
+<!--<ul id="contextMenu" class="dropdown-menu" role="menu">
+    <li ng-repeat="elem in actions"><a ng-click="configureNewNode(elem)" tabindex="-1" type="button" ng-show="isNode">
+		{{elem}}</a></li>
+	<li class="divider"></li>
+    <li><a tabindex="-1" ng-show="isNode" data-toggle="modal" data-target="#visNodeModal" ng-click="setNode()">Edit</a></li>
+    <li><a tabindex="-1" ng-show="isEdge && !isNode" data-toggle="modal" data-target="#visEdgeModal" ng-click="setEdge()">Edit</a></li>
+</ul>-->
+
+
+</div>

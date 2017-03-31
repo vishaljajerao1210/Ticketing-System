@@ -1,0 +1,54 @@
+
+				<div class="">
+			<div nv-file-drop="" uploader="uploader" filters="fileTypeFilter,maxFileAllowed" data-original-title="" title="">
+ 
+    <!--Attach File Buttton -->
+    <div class="fileUpload btn btn-primary pull-left"  data-original-title="" title="">
+        <span class="glyphicon glyphicon-paperclip"></span>&nbsp;Attach Files
+        <input type="file" multiple="" nv-file-select="" uploader="uploader" filters="maxFileAllowed" class="upload text-center" accept=".pdf,.jpeg,.jpg,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.7z,.gif,.png,.tiff,.tif">              
+    </div>
+    
+    <!-- List of uploaded file list-->
+    <div class="table-responsive-file" data-original-title="" title="">
+        <div class="t-file-upload-rows" ng-show="uploader.queue.length>0" data-original-title="" title="">
+            <!-- ngRepeat: item in uploader.queue --><div class="t-file-upload-row ng-scope" ng-repeat="item in uploader.queue" data-original-title="" title="">
+                <div class="t-upload-file pull-left">
+                    <span ng-class="{'tfile-uploaded-success':item.isUploaded}">
+						<div class="ng-binding"><a role="button"  ng-click="item.isUploaded &amp;&amp; downloadFile(item.file.name)">{{item.file.name}}</a></div>
+					</span>
+                </div>
+                <div class="t-file-progress t-upload-file" ng-show="uploader.isHTML5">
+                    <div ng-show="!item.isUploaded" class="progress" style="margin-bottom: 0;">
+                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="t-file-controls t-upload-file pull-right align-right">
+                    <a ng-click="removeItem(item,$index)" ng-hide="uploader.queue[$index].file.canDelete">
+                        <span class="glyphicon glyphicon-remove text-danger"></span>
+                                         
+                    </a>
+  
+                    <!-- <a ng-click="item.upload()"  class="">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </a> -->
+                      
+                    <!-- <div class="t-upload-file margin-btm-md" ng-mouseover="hoverIn()">
+                        <a href="" title="File Upload Fail" data-container="body" data-popover="true" data-toggle="popover" data-html="true" data-placement="left" data-content="" data-trigger="hover">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </a>
+                    </div> -->
+                </div>
+            </div><!-- end ngRepeat: item in uploader.queue -->
+        </div>
+    </div>
+    
+    <!--Upload All File Option button-->
+    <div >    
+     <button type="button" ng-click="uploadAll()" class="btn btn-primary" ng-show="multiple &amp;&amp; uploader.queue.length>0">Upload</button> 
+    </div>
+   
+    
+    
+    <!--<a ng-click="downloadFile('dd')">download</a>-->
+</div>
+		</div>		

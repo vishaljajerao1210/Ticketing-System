@@ -1,0 +1,71 @@
+<div ng-hide="viewDetails" class="clearfix">
+
+
+	<div class="bleach-background borderize pull-left full-width subtle-shadow" style="padding:7px 0px;">
+	<div class="col-md-4 col-xs-11">
+			<input type="text" class="form-control pull-left" ng-keyup="getSearchResult()" ng-model="search.searchStr"
+			placeholder="Search Tickets.." />
+			<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i>
+			<i ng-if="search.searchStr != '' && search.searchStr != null" ng-click="search.searchStr='';getSearchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+	</div>
+	<div class="col-md-8 col-xs-1 no-padding">
+		<button class="pull-right border-left btn btn-link" ng-click="showFilters()"><i class="material-icons md-18">filter_list</i></button>
+	</div> </div>
+
+	<div ng-show="filtersShown" class="form-inline pull-left full-width padding-md" style="background-color:#EEEEEE">
+		<form name="filterForm" ng-submit="applySearch()" novalidate>
+			<div class="dropdown inline-block "  ng-class="isInvalid('fromDate', filterForm)">
+				<label>{{currentRoute == '/mytickets' ? 'Raised' : 'Assigned'}} between</label>
+				<a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
+					<div class="input-group date" >
+						<input type="text" name="fromDate" class="form-control" placeholder="From Date" ng-model="formattedDates.raisedBefore" ng-required="true">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar font-small"></i></span>
+					</div>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<datetimepicker ng-model="search.startDate" data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', scope:this,  minView:'hour', 
+			maxDateModel:'search.endDate', displayModel:'formattedDates.raisedBefore', displayFormat:longDateFormat}" />
+				</ul>
+			</div>
+
+			<div class="dropdown inline-block" ng-class="isInvalid('toDate', filterForm )" >
+				<label class="margin-right-lg margin-left-lg">and</label>
+				<a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
+					<div class="input-group date" >
+						<input type="text" name="toDate" class="form-control" placeholder="To Date" ng-model="formattedDates.raisedAfter" ng-required="true">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-calendar font-small"></i></span>
+					</div>
+				</a>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<datetimepicker ng-model="search.endDate" data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', scope:this,  minView:'hour',minDateModel:'search.startDate'
+			, displayModel:'formattedDates.raisedAfter', displayFormat:longDateFormat}" />
+				</ul>
+			</div>
+			<div ng-hide="true" class="margin-top-lg form-inline">
+				<label style="margin-right: 60px;">Status</label>
+				<select style="width: 200px;" class="form-control" ng-model="search.status">
+			<option value="" disabled selected>Select status</option>
+	<option>All</option>
+	<option>Pending</option>
+	<option>Completed</option>	
+		</select>
+			</div>
+
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary btn-sm margin-left-sm margin-right-sm no-border"> Apply </button>
+				<button type="reset" class="btn btn-default btn-sm margin-left-sm margin-right-sm" ng-click="resetFilters()">Clear</button>
+			</div>
+	</div>
+
+	<div ng-show="filtersApplied" style="box-shadow:#c1c1c1 0px 1px 4px;" class="bleach-background pull-left full-width padding-md">
+		<span class="text-strong margin-right-lg">Filters applied :</span>
+		<span class="margin-right-lg">Tickets {{currentRoute == '/mytickets' ? 'Raised' : 'Assigned'}}</span>
+		<span class="label label-default italicize margin-right-lg text-gray" ng-if="showDates()">From : {{search.startDate | date : "dd'th' MMM, yyyy h:mm a"}}</span>
+		<span class="label label-default italicize margin-right-lg text-gray" ng-if="showDates()">To : {{search.endDate | date : "dd'th' MMM, yyyy h:mm a"}}</span>
+		<span class="margin-right-lg" ng-if="showStatus()">having status</span>
+		<span class="label label-success italicize margin-right-lg" ng-if="showStatus()">{{search.status}}</span>
+			<i class="material-icons md-18 text-gray pull-right pointer margin-right-sm"  ng-click="resetFilters()" style="top:0px;">clear</i>
+	</div>
+	
+	</form>
+</div>

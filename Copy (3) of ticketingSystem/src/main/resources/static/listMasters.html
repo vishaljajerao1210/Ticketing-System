@@ -1,0 +1,121 @@
+<div ng-controller="listmastercontroller">
+	<div class="col-md-10">
+		<div class="row margin-btm-lg">
+			<div class="col-md-4">
+				<input type="text" class="form-control pull-left" ng-model="search.searchStr" ng-change="searchResult()" placeholder="Search.."
+				/>
+				<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i> 			<i ng-if="search.searchStr != ''" ng-click="search.searchStr='';searchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+			</div>
+			<div class="col-md-8"> 			<button class="pull-right no-outline btn btn-link no-padding" ng-click="add()">
+		<i class="material-icons font-xlg">add_box</i> Add List</button>
+		</div>
+</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div ng-show="listmasters.length ==0 " class="no-items-container">
+			<div class="no-items"><i class="material-icons">info</i> No Lists found</div>
+		</div>
+				<table ng-hide="listmasters.length ==0 " class="table table-hover table-responsive bleach-background borderize">
+					<thead>
+						<th>List Name</th>
+						<th>List Label</th>
+						<th style="width: 7%;"></th>
+						<th style="width: 8%;"></></th>
+					</thead>
+					<tbody >
+						<tr ng-click="view($index)" class="pointer" ng-repeat="list in listmasters">
+							<td>{{list.listMasterValue}}</td>
+							<td>{{list.listMasterDescription}}</td>
+							<td>
+								<a role="button" href="#/master/listvalues/{{list.id}}" data-toggle="tooltip" data-placement="right" data-container="body" title="Click to add values">
+								<i class="material-icons text-dark" style="font-size:21px;">list</i></a>
+							</td>
+							<td>
+								<a role="button" ng-click="editListMaster(list.id,$event)" data-toggle="tooltip" data-placement="right" title="Click here to edit List Master">
+									<i class="material-icons md-18 text-dark">edit</i></a>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+
+			<div class="col-md-4 bleach-background borderize">
+				<div class="padding-md border-bottom  clearfix  padding-btm-lg">
+					<a ng-class="{'invisible' : !viewOnly}" href="" ng-click="editable(listmaster.id,$event)" 
+					class="pull-right" data-toggle="tooltip" data-placement="right" title="Click here to edit List Master">
+						<i class="material-icons md-18 text-dark">edit</i></a>
+				</div>
+				<div ng-hide="showform" class="margin-lg">
+					<div class="text-dark text-center font-lg padding-lg">Click on a record to view details</div>
+				</div>
+				<form class="clearfix" ng-show="showform" name="listmasterform" id="aeForm" ng-submit="addListMaster()" novalidate>
+
+			<div class="form-group required" ng-class="isInvalid('listmastervalue',listmasterform)">
+						<label for="userName" class="control-label">
+						 							List Name </label>
+
+						<span ng-show="listmasterform.$submitted && listmasterform.listmastervalue.$invalid"> 
+						 						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="listmastervalue is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+
+
+						<input class="form-control input-sm" ng-disabled="viewOnly" name="listmastervalue" type="field" ng-model="listmaster.listMasterValue"
+							required placeholder="List name is used internally" required/>
+
+					</div>
+					<div class="form-group required" ng-class="isInvalid('listmasterdescription',listmasterform)">
+						<label for="userName" class="control-label">
+						 							List Label </label>
+						<span ng-show="listmasterform.$submitted && listmasterform.listmasterdescription.$invalid"> 
+						 						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="listmasterdescription is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+						<input class="form-control input-sm" name="listmasterdescription" type="field" ng-disabled="viewOnly" ng-model="listmaster.listMasterDescription"
+							required placeholder="Label shown on the form" required/>
+
+					</div>
+
+
+					<div ng-hide="viewOnly">
+						<div class="form-group pull-right">
+							<button type="submit" class="btn btn-primary" data-loading-text="Saving..." id="btnSave">
+													Save
+												</button>
+							<a class="btn btn-default" ng-click="cancel()"> Cancel
+							</a>
+							
+						</div>
+
+					</div>
+
+					<div ng-if="viewOnly">
+						<div class="form-group  pull-right">
+	
+							<a class="btn btn-default" ng-click="cancel()">  Close
+							</a>
+						</div>
+
+					</div>
+
+
+				</form>
+
+			</div>
+		</div>
+		<div ng-hide="listmasters.length==0">
+			<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" ng-change="setPage()"
+				class="pagination-sm no-margin bleach-background borderize" items-per-page="pageSize" ng-show="showPagination">
+				</pagination>
+		</div>
+
+	</div>

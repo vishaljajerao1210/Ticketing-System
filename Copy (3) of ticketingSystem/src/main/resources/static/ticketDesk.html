@@ -1,0 +1,165 @@
+<div ng-controller="taskcontroller">
+	<div class="container">
+	
+	<div class="page-header" id="page-header" data-original-title=""
+						title="" ng-hide="viewDetails">
+						<h4 class="ng-binding">Ticket Desk</h4>
+					</div>
+					
+			<div class="pull-right" ng-show="viewDetails" >
+		<button class="btn btn-primary"  data-target="#claimTicket" data-toggle="modal">
+			<span class="glyphicon glyphicon-thumbs-up"></span> Claim Ticket
+		</button>
+		
+	</div>
+	<div class="page-header" ng-show="viewDetails">
+		<h4>
+			<a  href="#/ticketdesk"><span
+				class="glyphicon glyphicon-chevron-left"></span> </a>Claim Task
+
+		</h4>
+
+	</div>		
+				 
+					<div class="col-sm-12" ng-hide="viewDetails||tickets.length ==0">
+					
+					<search-template></search-template>
+					
+					</div>	
+					
+		<div class="col-sm-12">
+			<div class="col-sm-12" ng-hide="viewDetails">
+				<!-- <div class="divcontainer"> -->
+					
+					<!-- <div class="col-sm-12">
+						<div class="input-group searchbox" data-original-title="" title="">
+							<input type="text"
+								class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+								id="searchBox" ng-model="pagination.searchCriteria"
+								placeholder="Search" autofocus="" data-toggle="tooltip"
+								data-placement="left"> <span class="input-group-btn">
+								<button type="submit" class="btn btn-search"
+									ng-click="reloadMasters()">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</span>
+						</div>
+					</div> -->
+					<div class="col-sm-12">
+						<div ng-show="tasks.length ==0 " class="alert alert-info"
+							role="alert" data-original-title="" title="">
+							<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;No
+							Tasks
+						</div>
+					</div>
+
+
+
+					<table ng-hide="tasks.length==0"
+						class="table table-hover  table-condensed ticket-table">
+						<thead>
+							<th>Ticket Id</th>
+							<th>Raised Date</th>
+							<th>Raised Time</th>
+							<th>Raised By</th>
+							<th>Category</th>
+							<th>Domain</th>
+							<th>SubDomain</th>
+							<th>Status</th>
+							<th>view</th>
+						</thead>
+						<tbody ng-repeat="task in tasks">
+						<tr>
+							<td>{{task.id}}</td>
+							<td>{{task.raisedDate| shortDate}}</td>
+							<td>{{task.raisedTime}}</td>
+							<td>{{task.raisedBy.userName}}</td>
+							<td>{{task.categories.categoryDescription}}</td>
+							<td>{{task.domains.domainDescription}}</td>
+							<td>{{task.subdomain.subDomainDescription}}</td>
+							<td>{{task.currentstatus}}</td>
+							<td><a role="button" href="#/ticketdesk/{{task.id}}">Claim<span
+									class="glyphicon glyphicon-eye-open"></span></a>
+									</td>
+									</tr>
+						</tbody>
+					</table>
+			
+			</div>
+			
+			<div class="col-sm-12" ng-show="viewDetails">
+			 <common-template></common-template>		
+				
+	</div>
+	
+	<div class="modal in" id="claimTicket" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+
+			<div class="modal-content col-md-8 col-md-offset-2">
+				<div class="modal-header">
+					<div class="row">
+						<h4 id="myModalLabel">Claim Ticket</h4>
+					</div>
+				</div>
+				<div class="modal-body">
+					
+					<div class="row">
+					
+					<div class="col-sm-12" >
+					<div class="form-group">
+						
+							
+							<label class="normal-label">Comments</label>
+						<textarea class="form-control input-sm"  name="comments" 
+							ng-model="comments"></textarea>
+					</div>
+					 </div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="row">
+					
+					
+					
+					
+					
+					
+						<div class="input-group pull-right">
+							<button type="button" class="btn btn-primary"
+								data-loading-text="Resending..." ng-click="claimTask('STS08')">
+								<span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Claimed
+							</button>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</div>
+	</div>
+	</div>
+	

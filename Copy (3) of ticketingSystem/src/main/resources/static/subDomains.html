@@ -1,0 +1,197 @@
+<div ng-controller="subdomainscontroller">
+	<div class="col-md-10">
+		<div class="row margin-btm-lg">
+			<div class="col-md-4">
+				<input type="text" class="form-control pull-left" ng-model="search.searchStr" ng-change="searchResult()" placeholder="Search.."
+				/>
+				<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i> 			<i ng-if="search.searchStr != ''" ng-click="search.searchStr='';searchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+			</div>
+			<div class="col-md-8"> 			<button class="pull-right no-outline btn btn-link no-padding" ng-click="add()">
+		<i class="material-icons font-xlg">add_box</i> Add Sub-Domain</button>
+		</div>
+	</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div ng-show="subdomains.length ==0 " class="no-items-container">
+			<div class="no-items"><i class="material-icons">info</i> No Sub-Domains found</div>
+		</div>
+				<table ng-hide="subdomains.length ==0 " class="table table-hover table-responsive bleach-background borderize">
+					<thead>
+						<th>Sub-Domain</th>
+						<th>Domain</th>
+						<th>Expert Type</th>
+						<th>Default Expert</th>
+						<th></th>
+					</thead>
+					<tbody>
+						<tr ng-click="viewSubDomain($index)" class="pointer" ng-repeat="subdomain in subdomains">
+							<td>{{subdomain.subDomainDescription}}</td>
+							<td>{{subdomain.domains.domainDescription}}</td>
+							<td>{{subdomain.actorType}}</td>
+							<td ng-show="subdomain.isGroup">{{subdomain.defaultUserGroup.groupName}}</td>
+							<td ng-hide="subdomain.isGroup">{{subdomain.defaultExpert.userName}}</td>
+							<td class=" padding-right-lg">
+								<a role="button" ng-click="editSubDomain(subdomain.id,$event)"><i class="material-icons md-18 text-dark">edit</i></a>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+
+			<div class="col-md-4 bleach-background borderize">
+				<div class="padding-md border-bottom  clearfix  padding-btm-lg">
+					<a ng-class="{'invisible' : !viewOnly}" href="" ng-click="editable(subdomain.id,$event)" class="pull-right">
+						<i class="material-icons md-18 text-dark">edit</i></a>
+				</div>
+				<div ng-hide="showform" class="margin-lg">
+					<div class="text-dark text-center font-lg padding-lg">Click on a record to view details</div>
+				</div>
+
+				<form class="clearfix" ng-show="showform" name="subdomainform" id="aeForm" ng-submit="addSubDomain()" novalidate>
+
+
+					<div class="form-group required" ng-class="isInvalid('subdomain',subdomainform)">
+						<label for="userName" class="control-label">
+						 							Sub-Domain Name</label>
+						<span ng-show="subdomainform.$submitted &&subdomainform.subdomain.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Sub Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+
+						<input class="form-control input-sm" name="subdomain" type="field" ng-model="subdomain.subDomainDescription" ng-disabled="viewOnly"
+							ng-change="checkValid(subdomain.subDomainDescription)" required placeholder="Sub-Domain name" />
+						<div ng-show="invalid" class="text-error padding-sm"><i class="material-icons md-18">error</i> Sub-Domain already exists.</div>
+					</div>
+
+
+					<div class="form-group required" ng-class="isInvalid('domain',subdomainform)">
+						<label for="DesignationRole" class="control-label"> Domain </label>
+						<span ng-show="subdomainform.$submitted &&subdomainform.domain.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+
+						<input name="domain" ng-model="domainname" ng-disabled="viewOnly" typeahead-editable="false" typeahead-min-length="1" typeahead-on-select="selectItems.domainId($item)"
+							placeholder="Start typing to select domain.." autocomplete="off" uib-typeahead="x.domainDescription for x in fetchAutoCompleteResults.getDomains($viewValue)"
+							class="form-control" ng-required="true" />
+					</div>
+
+
+
+					<div class="form-group required" ng-class="isInvalid('approval',subdomainform)">
+						<label for="DesignationRole" class="control-label">Required Approval Levels </label>
+						<span ng-show="subdomainform.$submitted &&subdomainform.domain.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+						<div >
+							<label style="font-weight: normal" class="checkbox-inline no-margin-top">
+                                            <input type="checkbox" value="manager"   ng-click="toggleManagerSelected()" ng-checked="subdomain.isManagerApproval"/>Manager
+                                        </label> 
+							<label style="font-weight: normal" class="checkbox-inline">
+                                            <input type="checkbox" value="manager"   ng-click="toggleSpecialManagerSelected()" ng-checked="subdomain.isSpecialManagerApproval"/>Special Manager
+                                        </label>
+						</div>
+
+					</div>
+
+
+
+
+
+					<div class="form-group required" ng-class="isInvalid('nextactor',subdomainform)">
+						<label for="DesignationRole" class="control-label"> Default Expert Type </label>
+						<span ng-show="subdomainform.$submitted &&subdomainform.nextactor.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+
+						<select class="form-control input-sm" ng-disabled="viewOnly" name="nextactor" ng-disabled="viewOnly" ng-model="actorType"
+							ng-change="selected(actorType)" required>
+							<option value="" disabled selected hidden>
+										Choose Default Expert</option>
+							<option ng-repeat="next in defaultActorType" value="{{next.name}}">
+								{{next.name}}</option>
+						</select>
+					</div>
+
+
+					<div class="form-group required" ng-if="defaultActorType[1].flag" ng-class="isInvalid('expertgroup',subdomainform)">
+						<label for="DesignationRole" class="control-label"> Expert Group </label>
+						<span ng-show="subdomainform.$submitted &&subdomainform.expertgroup.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+						<input name="expertgroup" ng-model="groupname" ng-disabled="viewOnly" typeahead-editable="false" typeahead-min-length="1"
+							typeahead-on-select="selectItems.groupId($item)" placeholder="Start typing to select group.." autocomplete="off" uib-typeahead="x.groupName  for x in fetchAutoCompleteResults.getGroups($viewValue)"
+							class="form-control" ng-required="true" />
+
+
+					</div>
+
+
+
+					<div class="form-group required" ng-if="defaultActorType[0].flag" ng-class="isInvalid('expert',subdomainform)">
+						<label for="DesignationRole" class="control-label"> Expert </label>
+						<span ng-show="subdomainform.$submitted &&subdomainform.expert.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Expert is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+						<input name="expert" ng-model="subdomain.defaultExpert.userName" ng-disabled="viewOnly" typeahead-editable="false" typeahead-min-length="1"
+							typeahead-on-select="selectItems.user($item)" placeholder="Start typing to select group.." autocomplete="off" uib-typeahead="x.userName  for x in fetchAutoCompleteResults.getUsers($viewValue)"
+							class="form-control" ng-required="true" />
+
+					</div>
+
+
+					<div ng-hide="viewOnly">
+						<div class="form-group pull-right">
+							<button type="submit" class="btn btn-primary" data-loading-text="Saving..." id="btnSave">
+												 Save
+												</button>
+							<a class="btn btn-default" ng-click="cancel()">Cancel
+					</a>
+						</div>
+					</div>
+					<div ng-if="viewOnly">
+						<div class="form-group pull-right">
+							<a class="btn btn-default" ng-click="cancel()">Close</a>
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+
+		<div ng-hide="subdomains.length==0">
+			<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" ng-change="setPage()"
+				class="pagination-sm no-margin bleach-background borderize" items-per-page="pageSize" ng-show="showPagination">
+				</pagination>
+
+		</div>
+
+	</div>

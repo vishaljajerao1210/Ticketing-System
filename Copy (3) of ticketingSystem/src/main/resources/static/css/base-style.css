@@ -1,0 +1,139 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/roboto/Roboto-Regular.ttf) format('truetype'); /* Safari, Android, iOS */
+}
+*{
+font-family: "Roboto";
+-moz-font-smoothing: antialiased;
+-webkit-font-smoothing: antialiased;
+}
+html, body{
+    font-size : 13px;
+    color: #4A4A4A;
+    font-family: "Roboto";
+}
+#wrapper{
+    position : absolute;
+    width : 100%;
+   background: #fbfbfb;
+    /* padding: 20px; */
+    height: calc(100% - 50px);
+    overflow-y: auto;
+}
+#page-content-wrapper{
+    margin-top : 35px;
+}
+#wrapper::-webkit-scrollbar {
+    width: 0.4em;
+}
+
+#wrapper::-webkit-scrollbar-track {
+    background-color: #fff;
+    position: absolute;
+}
+
+#wrapper::-webkit-scrollbar-thumb {
+    background-color: #8c939a;
+    border-radius: 1000px;
+}
+
+.flex-container{
+	/*padding: 60px 30px;*/
+       display: flex;  
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center; 
+}
+.count-card{
+    margin: 15px;
+    width: 225px;
+}
+.dashboard-task-container{
+    min-width: 45%;
+    max-width: 100%;
+    width: 500px;
+    margin: 15px;
+    min-height: 381px;
+    position : relative;
+        /*height: 373px;
+    overflow: hidden;*/
+}
+.dashboard-count-container{
+   padding-bottom: 15px;
+    background: #fbfbfb;
+    /*box-shadow: inset rgba(193, 193, 193, 0.64) 0px 0px 4px;*/
+}
+.status-indicator{
+    border-radius: 100%;
+    height: 7px;
+    width: 7px;
+    background-color: #D32F2F;
+    display: inline-block;
+    margin: 0px 5px;
+}
+.inline-icon{
+    position: absolute;
+    right: 21px;
+    top: 6px;
+}
+label {
+    margin: 5px;
+}
+.page-container{
+    padding: 15px 75px;
+}
+dt, dd {
+    line-height: 2;
+}
+.approval-history{
+        padding-left: 20px;
+    padding-bottom: 20px;
+    padding-right: 20px;
+}
+.approval-history .material-icons{
+    top: 19px;
+    right : 6px;
+}
+.approval-history ul li {
+    list-style-type: none;
+    position: relative;
+    width: 100%;
+    padding-left: 12px;
+}
+.approval-history .timeline{
+    position: absolute;
+    width: 1px;
+    background-color: #D1D1D1;
+    height: 96%;
+    left: 0px;
+    bottom: -16px;
+}
+.no-items-container{
+    position: relative;
+    height: 80px;
+    background-color: #f0f0f0;
+}
+.no-items{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+   font-size:18px;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    color : #8a8a8a;
+}
+.td-sm{
+    line-height: 2 !important;
+}
+input:-webkit-autofill, input:-webkit-autofill:hover,input:-webkit-autofill:focus{
+    background-color: #FFFFFF !important;
+  ;
+ -webkit-box-shadow: 0 0 0px 1000px #fcf8e3 inset;
+ box-shadow: 0 0 0px 1000px #fcf8e3 inset;
+}
+.login-input{
+   
+}
+.login-input:focus{
+    box-shadow: none;
+}

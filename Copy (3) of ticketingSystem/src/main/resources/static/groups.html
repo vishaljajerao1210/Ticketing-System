@@ -1,0 +1,159 @@
+
+
+<div ng-controller="usergroupscontroller">
+
+<div class="container">
+	
+	<div class="page-header" id="page-header" data-original-title="" title="">
+		<h4 class="ng-binding">Groups</h4></div>
+		
+		
+		<div class="col-lg-7 subheader">
+				<div class="addbutton">
+					<a role="button" ng-click="add()" data-toggle="tooltip" data-placement="right"
+						title="Click here to add Group"><span
+						class="glyphicon glyphicon-plus"></span>Add Group</a>
+				</div>
+				<!--  <div class="input-group searchbox" data-original-title="" title="">
+                    <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="searchBox" ng-model="pagination.searchCriteria" placeholder="Search" autofocus="" data-toggle="tooltip" data-placement="left">
+                    <span class="input-group-btn">
+                    <button type="submit" class="btn btn-search" ng-click="reloadMasters()">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                    </span>
+                </div> -->
+                </div>
+		
+		
+		
+		
+		
+		<div class="col-lg-6 table-responsive">
+			
+			
+		
+                
+				<div ng-show="groups.length ==0 " class="alert alert-info" role="alert" data-original-title="" title="">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;No groups
+        </div>
+        
+       
+				<table ng-hide="groups.length ==0 " class="table table-hover table-condensed">
+					<thead>
+						<th>Code</th>
+						<th>Name</th>
+						<th>Edit</th>
+					</thead>
+					<tbody ng-repeat="group in groups">
+					<tr ng-click="viewGroup(group)">
+						<td>{{group.groupCode}}</td>
+						<td>{{group.groupName}}</td>
+						
+						<td><a role="button" ng-click="editGroup(group.id,$event)"  data-toggle="tooltip" data-placement="right"
+						title="Click here to Edit Group"><i class="material-icons md-18 text-dark">edit</i></a></td>
+</tr>
+
+					</tbody>
+				</table>
+				
+
+			
+		
+</div>
+		<div ng-show="showform" class="col-lg-4">
+		
+				<form class="clearfix" name="groupform" id="aeForm" novalidate>
+
+					
+						
+							<div class="form-group required" ng-class="isInvalid('groupcode',groupform)">
+								<label for="userName" class="control-label"> Group Code </label>
+								
+									
+											 <span
+						ng-show="groupform.$submitted && groupform.groupcode.$invalid">  
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="group code is required !" popover-trigger="mouseenter">
+						</span>
+				 </span> 		
+								 <input
+									class="form-control input-sm"  name="groupcode"
+									type="field" ng-model="group.groupCode"
+						ng-disabled="viewOnly"	ng-change="checkvalid(group.groupCode)" required
+									placeholder="Group Code" />
+								<!-- <div ng-show="invalid">Category already exists!!!</div> -->
+							</div>
+							
+							
+							<div class="form-group required" ng-class="isInvalid('groupname',groupform)">
+								<label for="userName" class="control-label"> Group Name </label>
+								
+									
+											 <span
+						ng-show="groupform.$submitted && groupform.groupname.$invalid">  
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="group code is required !" popover-trigger="mouseenter">
+						</span>
+				 </span> 		
+								 <input
+									class="form-control input-sm"  name="groupname"
+									type="field" ng-model="group.groupName"
+						ng-disabled="viewOnly"	ng-change="checkvalid(group.groupName)" required
+									placeholder="Group Name" />
+								<!-- <div ng-show="invalid">Category already exists!!!</div> -->
+							</div>
+							
+							
+							
+							
+
+						
+					
+					<div class="col-sm-12" ng-hide="viewOnly">
+						<div class="form-group col-sm-12" style="float: center">
+							<button type="submit" class="btn btn-primary"
+								data-loading-text="Saving..." id="btnSave"
+								ng-click="addGroup()">
+								<span class="glyphicon glyphicon-floppy-disk"></span> Save
+							</button>
+							
+							<a ng-hide="editMode" class="btn btn-default" ng-click="cancel()"> <span
+								class="glyphicon glyphicon-remove"></span> Cancel
+							</a>
+							<a ng-show="editMode" class="btn btn-default" ng-click="editModeGroup(group)"> <span
+								class="glyphicon glyphicon-remove"></span> Cancel
+							</a>
+						</div>
+
+					</div>
+					
+					<div class="col-sm-12" ng-if="viewOnly">
+										<div class="form-group col-sm-12" style="float: center">
+												<button ng-click="editable(group.id,$event)" class="btn btn-primary"
+													data-loading-text="Saving..." id="btnSave">
+													<i class="material-icons md-18 text-dark">edit</i>Edit
+												</button>
+												<a class="btn btn-default" ng-click="cancel()"> <span
+													class="glyphicon glyphicon-remove"></span> Close
+												</a>
+											</div>
+
+										</div>	
+
+				</form>
+			
+		</div>
+	
+
+
+
+
+
+
+
+</div>
+</div>

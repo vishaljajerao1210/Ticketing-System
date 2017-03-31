@@ -1,0 +1,131 @@
+<div ng-controller="personalTaskController" class="margin-top-lg container-fluid">
+
+	<div class="" ng-hide="viewDetails">
+
+		<div class="col-md-2 margin-btm-lg">
+			<ul class="nav nav-pills nav-stacked bleach-background borderize subtle-shadow">
+				<li ng-class="{'active' : setActive('pendingTasks')}" ><a href=""  ng-click="setParam('pendingTasks')" aria-controls="pendingTasks" data-target="#pendingTasks" data-toggle="tab">Pending Tasks
+			<span class="badge bg-primary font-xs pull-right">{{taskStats.pendingTasks}}</span></a></li>
+				<li ng-class="{'active' : setActive('completedTasks')}" ><a href=""  ng-click="setParam('completedTasks')" aria-controls="completedTasks" data-target="#completedTasks" data-toggle="tab" >Completed Tasks
+			<span class="badge bg-primary font-xs pull-right">{{taskStats.completedTasks}}</span></a></li>
+
+			</ul>
+		</div>
+
+
+
+		<div class="tab-content col-md-10">
+			<div role="tabpanel" class="tab-pane"  ng-class="{'active' : setActive('pendingTasks')}" id="pendingTasks">
+
+				<div ng-hide="!searchPendingTasks.isSearched && (viewDetails||tasks.length ==0)">
+					<search-template search-obj="searchPendingTasks" get-data="getTasks()"></search-template>
+				</div>
+				<div ng-show=" tasks.length ==0 " class="no-items-container" role="alert">
+					<div class="no-items"><i class="material-icons">{{searchPendingTasks.isSearched? 'info' : 'done_all'}}</i>
+						<span ng-if="!searchPendingTasks.isSearched"> All done for now ! </span>
+						<span ng-if="searchPendingTasks.isSearched"> No results found</span>
+					</div>
+				</div>
+
+
+
+
+				<table ng-hide="tasks.length==0" class="table table-hover table-responsive pull-left borderize bleach-background margin-top-lg">
+					<thead>
+						<th>Ticket No.</th>
+						<th>Category</th>
+						<th>Requestor</th>
+						<th>Assigned On</th>
+						<th>Ticket Status</th>
+						<th></th>
+					</thead>
+					<tbody>
+						<tr ng-repeat="ticket in tasks">
+							<td class="text-strong"># {{ticket.id}}</td>
+							<td>{{ticket.categories.categoryDescription}}</td>
+							<td>{{ticket.raisedBy.userName}}</td>
+							<td>{{ticket.assignedOn | date : "dd'th' MMM, yyyy h:mm a"}}</td>
+							<td>{{ticket.currentStatus}}</td>
+							<td><a role="button" href="#/personaltasks/{{ticket.id}}">View</a> </td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div ng-hide="tasks.length==0||viewDetails" class="pull-left form-inline">
+					<label>Size: </label> <select class="form-control input-sm" name="pageSize" ng-model="pendingTaskspage.pSize" ng-change="setSize(pageSize)">
+							<option ng-repeat="p in pendingTaskspage.pageSizeOptions" value="{{p}}"  >
+								{{p}}</option>
+						</select>
+				</div>
+				<div ng-hide="tasks.length==0||viewDetails" class="pull-right">
+					<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="pendingTaskspage.totalItems"  max-size="maxSize" ng-show="pendingTaskspage.showPagination"
+						ng-model="pendingTaskspage.currentPage" ng-change="setCurrentPage()" class="pagination-sm pull-right no-margin bleach-background borderize" items-per-page="pendingTaskspage.pSize">
+						</pagination>
+				</div>
+
+			</div>
+
+
+
+			<div role="tabpanel" class="tab-pane" id="completedTasks"  ng-class="{'active' : setActive('completedTasks')}">
+
+
+				<div ng-hide="!searchCompletedTasks.isSearched && (viewDetails||completedTasks.length ==0)">
+					<search-template search-obj="searchCompletedTasks" get-data="getCompletedTasks()"></search-template>
+				</div>
+
+				<div ng-show="completedTasks.length ==0 " class="no-items-container margin-top-lg " role="alert">
+					<div class="no-items"><i class="material-icons">{{searchCompletedTasks.isSearched? 'info' : 'done_all'}}</i>
+						<span ng-if="!searchCompletedTasks.isSearched"> Complete your tasks and come back </span>
+						<span ng-if="searchCompletedTasks.isSearched"> No results found</span>
+					</div>
+				</div>
+
+				<table ng-hide="completedTasks.length==0" class="table table-hover table-responsive pull-left borderize bleach-background margin-top-lg">
+					<thead>
+						<th>Ticket No.</th>
+						<th>Category</th>
+						<th>Requestor</th>
+						<th>Action Level</th>
+						<th>Completed On</th>
+						<th>Action Performed</th>
+						<th></th>
+					</thead>
+					<tbody>
+						<tr ng-repeat="completedTask in completedTasks track by $index">
+							<td class="text-strong"># {{completedTask.ticketMaster.id}}</td>
+							<td>{{completedTask.ticketMaster.categories.categoryDescription}}</td>
+							<td>{{completedTask.ticketMaster.raisedBy.userName}}</td>
+							<td>{{completedTask.approverLevel}}</td>
+							<td>{{completedTask.endDate| date : "dd'th' MMM, yyyy h:mm a"}}</td>
+							<td>{{completedTask.actionPerformed}}</td>
+							<td><a role="button" href="#/personaltasks/{{completedTask.ticketMaster.id}}">View</a> </td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="pull-right" ng-hide="completedTasks.length==0||viewDetails">
+					<ul uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="completedTaskspage.totalItems"  max-size="maxSize" ng-show="completedTaskspage.showPagination"
+						ng-model="completedTaskspage.currentPage" ng-change="setCompletedPage()" class="pagination-sm pull-right no-margin bleach-background borderize" items-per-page="completedTaskspage.pSize">
+						</ul>
+				</div>
+				<div class="pull-left form-inline" ng-hide="completedTasks.length==0||viewDetails">
+					<label>Size: </label> <select class="form-control input-sm" name="pageSize" ng-model="completedTaskspage.pSize" ng-change="setSize(pageSize)">
+							<option ng-repeat="p in completedTaskspage.pageSizeOptions" value="{{p}}"  >
+								{{p}}</option>
+						</select>
+
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<div ng-show="viewDetails">
+		<common-template previous-page-link="personaltasks"></common-template>
+	</div>
+</div>

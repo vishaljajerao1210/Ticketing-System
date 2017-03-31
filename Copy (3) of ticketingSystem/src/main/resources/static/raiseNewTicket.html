@@ -1,0 +1,310 @@
+<div ng-controller="ticketcontroller">
+	<div class="page-container overflow-hidden">
+
+		<div class="row borderize subtle-shadow"
+			style="background-color: #f0f0f0">
+			<div class="col-sm-4">
+				<div class="form-group required">
+					<label>Category</label>
+					<!-- <select class="form-control input-sm" 
+						ng-disabled="viewOnly" ng-change="chosenCategory(categoryname.id)"
+						ng-options="category.categoryDescription  for category in categories track by category.id"
+						ng-model="categoryname">
+						<option value="" disabled selected>Choose Category</option>
+</select> -->
+					<input name="categoryname" ng-model="categoryname" autocomplete="off"
+						typeahead-editable="false" typeahead-min-length="1"
+						typeahead-on-select="selectItems.selectCategory($item)"
+						placeholder="Start typing to select category.."
+						autocomplete="off" uib-typeahead="x.categoryDescription for x in fetchDataForAutoComplete.getCategories($viewValue)"
+						class="form-control" />
+
+				</div>
+
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group required">
+					<label for="userName" class="control-label"> Domain </label> <input
+						name="domainname" ng-model="domainname" typeahead-editable="false"
+						typeahead-min-length="1"
+						typeahead-on-select="selectItems.selectDomain($item)"
+						placeholder="Start typing to select domain.."
+						ng-disabled="!categoryname || categoryname ==null || categoryname == ''"
+						autocomplete="off" uib-typeahead="x.domainDescription for x in fetchDataForAutoComplete.getDomainsByCategory($viewValue)"
+						class="form-control" />
+
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="form-group required">
+					<label for="userName" class="control-label"> Sub Domain </label> <input
+						name="sudomainname" ng-model="subdomainname"
+						typeahead-editable="false" typeahead-min-length="1"
+						typeahead-on-select="selectItems.selectSubDomain($item)"
+						placeholder="Start typing to select sub-domain.."
+						ng-disabled="!domainname || domainname ==null || domainname == ''"
+						autocomplete="off" uib-typeahead="x.subDomainDescription for x in fetchDataForAutoComplete.getSubDomainsByCategory($viewValue)"
+						class="form-control" />
+				</div>
+			</div>
+		
+	</div>
+	<div class="row borderize margin-top-lg" style="background-color:#f0f0f0; min-height:250px; position:relative" >
+		<div class="no-items"  ng-hide="show">Select the above fields to display the form</div>
+	<form name="dynamicForm" ng-show="show&&getFlag()" ng-submit="addTicket()" novalidate>
+			<div ng-repeat="domainfield in domainfields">		
+		<div class="col-sm-4 " ng-if="domainfield.fieldType=='text'&&domainfield.isFieldEnabled">
+						<div class="form-group " 
+							
+							ng-class="isInvalid('{{domainfield.fieldName}}',domainfield.isMandatory,domainfield.id)">
+							<!-- <label ng-show="domainfield.isMandatory" class="control-label">{{domainfield.fieldLabel}}</label>
+							<label ng-hide="domainfield.isMandatory" class="normal-label">{{domainfield.fieldLabel}}</label> -->
+
+
+							<label for="domainfield.fieldLabel"
+								ng-class="label(domainfield.isMandatory)">{{domainfield.fieldLabel}}</label>
+							<input class="form-control input-sm" placeholder="{{domainfield.fieldDescription}}"
+								type="{{domainfield.fieldType}}"
+								name="{{domainfield.fieldName}}"
+								ng-model="raiseticket.domain[domainfield.id]"
+								ng-required="domainfield.isMandatory">
+						</div>
+					</div>
+				
+				
+				
+				
+					
+				<div class="col-sm-4 " ng-if="domainfield.fieldType=='date'&&domainfield.isFieldEnabled">
+			<label for="domainfield.fieldLabel" ng-class="label(domainfield.isMandatory)">{{domainfield.fieldLabel}}</label>
+			 
+			<a class="dropdown-toggle" id="{{domainfield.fieldLabel}}" role="button" data-toggle="dropdown">
+				<div class="input-group date">
+			<input type="text" class="form-control input-sm" placeholder="{{domainfield.fieldDescription}}" ng-model="raiseticket.domain[domainfield.id]"> 
+			<span class="input-group-addon"><i class="glyphicon glyphicon-calendar font-small"></i></span></div>
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+			<datetimepicker ng-model="raiseticket.domain[domainfield.id]"
+			data-datetimepicker-config="{ dropdownSelector: '#{{domainfield.fieldLabel}}', scope:this,  minView:'hour', 
+			displayModel:'raiseticket.domain[domainfield.id]', displayFormat:longDateFormat}" />
+			</ul>
+		</div>
+					
+					
+					
+					
+					
+				
+			
+				
+					
+
+
+
+
+
+
+					<div class="col-sm-4"
+						ng-if="domainfield.isList && domainfield.fieldType=='dropdown' && domainfield.isFieldEnabled">
+						<div class="form-group"
+							ng-class="isInvalid('{{domainfield.listmaster.listMasterDescription}}',domainfield.isMandatory,domainfield.id)">
+							<label for="domainfield.fieldLabel"
+								ng-class="label(domainfield.isMandatory)">{{domainfield.listmaster.listMasterDescription}}</label>
+
+							<!-- <label for="domainfield.fieldLabel" ng-show="domainfield.isMandatory" class="control-label">{{domainfield.listmaster.listMasterDescription}}</label>
+							<label for="domainfield.fieldLabel" ng-hide="domainfield.isMandatory" class="normal-label">{{domainfield.listmaster.listMasterDescription}}</label> -->
+							<select class="form-control" 
+								name="{{domainfield.listmaster.listMasterDescription}}"
+								ng-options="listvalue.listItemDisplayValue as listvalue.listItemDisplayValue  for listvalue  in domainfield.listmaster.listvalues"
+								ng-model="raiseticket.domain[domainfield.id]"
+								ng-required="domainfield.isMandatory">
+								 <option value="" disabled selected  >{{domainfield.fieldDescription==null?'select type...':domainfield.fieldDescription}}</option> 
+							</select>
+
+						</div>
+					</div>
+					<div class="col-sm-12"
+						ng-if="domainfield.fieldType=='checkbox'&&domainfield.isFieldEnabled">
+						<div class="form-group">
+							<!-- <label  for="domainfield.fieldLabel" ng-show="domainfield.isMandatory" class="control-label">{{domainfield.listmaster.listMasterDescription}}</label>
+							<label for="domainfield.fieldLabel" ng-hide="domainfield.isMandatory" class="normal-label">{{domainfield.listmaster.listMasterDescription}}</label> -->
+
+							<label for="domainfield.fieldLabel"
+								ng-class="label(domainfield.isMandatory)">{{domainfield.listmaster.listMasterDescription}}</label>
+
+							<div class="form-group custom-checkbox">
+								<div class="checkbox-inline"
+									ng-repeat="value in domainfield.listmaster.listvalues">
+									<label style="font-weight: normal"> <input
+										type="{{domainfield.fieldType}}"
+										value="{{value.listItemDisplayValue}}"
+										ng-click="toggleSelected(domainfield.id,value.listItemDisplayValue,'domains')" />{{value.listItemDisplayValue}}
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+
+
+				<div ng-repeat="subdomainfield in subdomainfields">
+
+					<div class="col-sm-4 "
+						ng-if="subdomainfield.fieldType=='text'&&subdomainfield.isFieldEnabled">
+						<div class="form-group"
+							ng-class="isInvalid('{{subdomainfield.fieldName}}',subdomainfield.isMandatory,subdomainfield.id)">
+							<!-- <label ng-show="subdomainfield.isMandatory" class="control-label">{{subdomainfield.fieldLabel}}</label>
+							<label ng-hide="subdomainfield.isMandatory" class="normal-label">{{subdomainfield.fieldLabel}}</label> -->
+							<label ng-class="label(subdomainfield.isMandatory)">{{subdomainfield.fieldLabel}}</label>
+							<input class="form-control input-sm" placeholder="{{subdomainfield.fieldDescription}}"
+								type="{{subdomainfield.fieldType}}"
+								name="{{subdomainfield.fieldName}}"
+								ng-model="raiseticket.subdomain[subdomainfield.id]"
+								ng-required="subdomainfield.isMandatory">
+						</div>
+					</div>
+					
+					
+								
+				<div class="col-sm-4 " ng-if="subdomainfield.fieldType=='date'&&subdomainfield.isFieldEnabled">
+			<label for="subdomainfield.fieldLabel" ng-class="label(subdomainfield.isMandatory)">{{subdomainfield.fieldLabel}}</label>
+			 
+			<a class="dropdown-toggle" id="{{subdomainfield.fieldLabel}}" role="button" data-toggle="dropdown">
+				<div class="input-group date">
+			<input type="text" class="form-control input-sm" placeholder="{{subdomainfield.fieldDescription}}" ng-model="raiseticket.subdomain[subdomainfield.id]"> 
+			<span class="input-group-addon"><i class="glyphicon glyphicon-calendar font-small"></i></span></div>
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+			<datetimepicker ng-model="raiseticket.subdomain[subdomainfield.id]"
+			data-datetimepicker-config="{ dropdownSelector: '#{{subdomainfield.fieldLabel}}', scope:this,  minView:'hour', 
+			displayModel:'raiseticket.subdomain[subdomainfield.id]', displayFormat:longDateFormat}" />
+			</ul>
+		</div>
+					
+					
+					
+					
+					
+					
+					
+				
+					<div class="col-sm-4" ng-if="subdomainfield.fieldType=='dropdown' && subdomainfield.isFieldEnabled">
+					
+						<div class="form-group"
+							ng-class="isInvalid('{{subdomainfield.listmaster.listMasterDescription}}',subdomainfield.isMandatory,subdomainfield.id)">
+							<!-- <label for="subdomainfield.fieldLabel" ng-show="subdomainfield.isMandatory" class="control-label">{{subdomainfield.listmaster.listMasterDescription}}</label>
+							<label for="subdomainfield.fieldLabel" ng-hide="subdomainfield.isMandatory" class="normal-label">{{subdomainfield.listmaster.listMasterDescription}}</label> -->
+							<label for="subdomainfield.fieldLabel"
+								ng-class="label(subdomainfield.isMandatory)">{{subdomainfield.listmaster.listMasterDescription}}</label>
+							<select class="form-control input-sm" 
+								name="{{subdomainfield.listmaster.listMasterDescription}}"
+								ng-options="listvalue.listItemDisplayValue as listvalue.listItemDisplayValue for listvalue  in subdomainfield.listmaster.listvalues"
+								ng-model="raiseticket.subdomain[subdomainfield.id]" ng-required="subdomainfield.isMandatory">
+								<option value="" disabled selected >{{subdomainfield.fieldDescription==null?'select type...': subdomainfield.fieldDescription}}</option> 
+							</select>
+						
+
+						</div>
+					</div>
+
+					<div class="col-sm-12"
+						ng-if="subdomainfield.fieldType=='checkbox'&&subdomainfield.isFieldEnabled">
+						<div class="form-group">
+							<!-- <label for="domainfield.fieldLabel" ng-show="subdomainfield.isMandatory" class="control-label">{{subdomainfield.listmaster.listMasterDescription}}</label>
+							<label for="domainfield.fieldLabel" ng-hide="subdomainfield.isMandatory" class="normal-label">{{subdomainfield.listmaster.listMasterDescription}}</label> -->
+							<label for="subdomainfield.fieldLabel"
+								ng-class="label(subdomainfield.isMandatory)">{{subdomainfield.listmaster.listMasterDescription}}</label>
+							<div class="form-group form-group ">
+								<div class="checkbox-inline"
+									ng-repeat="value in subdomainfield.listmaster.listvalues">
+									<label style="font-weight: normal"> <input
+										type="{{subdomainfield.fieldType}}"
+										value="{{value.listItemDisplayValue}}"
+										ng-click="toggleSelected(subdomainfield.id,value.listItemDisplayValue,'subdomains')" />{{value.listItemDisplayValue}}
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+
+				</div>
+
+				<div ng-repeat="domainfield in domainfields">
+					<div class="col-sm-4"
+						ng-if="domainfield.fieldType=='textarea'&&domainfield.isFieldEnabled">
+						<div class="form-group "
+							ng-class="isInvalid('{{domainfield.fieldName}}',domainfield.isMandatory,domainfield.id)">
+							<!-- <label ng-show="domainfield.isMandatory" class="control-label">{{domainfield.fieldLabel}}</label>
+							<label ng-hide="domainfield.isMandatory" class="normal-label">{{domainfield.fieldLabel}}</label> -->
+							<label for="domainfield.fieldLabel"
+								ng-class="label(domainfield.isMandatory)">{{domainfield.fieldLabel}}</label>
+							<textarea class="form-control input-sm"
+								name="{{domainfield.fieldName}}" placeholder="{{domainfield.fieldDescription}}"
+								ng-model="raiseticket.domain[domainfield.id]"
+								ng-required="domainfield.isMandatory"></textarea>
+						</div>
+					</div>
+				</div>
+				<div ng-repeat="subdomainfield in subdomainfields">
+					<div class="col-sm-4"
+						ng-if="subdomainfield.fieldType=='textarea'&&subdomainfield.isFieldEnabled">
+						<div class="form-group"
+							ng-class="isInvalid('{{subdomainfield.fieldName}}',subdomainfield.isMandatory,subdomainfield.id) ">
+							<!-- <label ng-show="subdomainfield.isMandatory" class="control-label">{{subdomainfield.fieldLabel}}</label>
+							<label ng-hide="subdomainfield.isMandatory" class="normal-label">{{subdomainfield.fieldLabel}}</label> -->
+
+
+							<label ng-class="label(subdomainfield.isMandatory)">{{subdomainfield.fieldLabel}}</label>
+							<textarea class="form-control input-sm" placeholder="{{domainfield.fieldDescription}}"
+								name="{{subdomainfield.fieldName}}"
+								ng-model="raiseticket.subdomain[subdomainfield.id]"
+								ng-required="subdomainfield.isMandatory"></textarea>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+				<!-- files -->
+
+				<div class="col-sm-12 margin-top-md margin-btm-md">
+					<upload ng-show="showbutton" class=" pull-left half-width"></upload>
+				</div>
+
+				<!--  end of files -->
+
+
+
+
+
+				<div class="col-sm-12 " style="position: absolute; bottom: 15px;"
+					ng-show="showbutton">
+					<div class="pull-right">
+						<button type="submit" class="btn btn-primary" 
+							data-loading-text="Saving..." id="btnSave">Submit</button>
+						<a class="btn btn-default" ng-click="cancel()">Cancel </a>
+					</div>
+				</div>
+
+
+
+
+			</form>
+		</div>
+
+	</div>
+</div>
+
+
+
+
+

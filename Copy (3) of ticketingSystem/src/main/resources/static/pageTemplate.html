@@ -1,0 +1,17 @@
+
+				<div >
+					<!-- <uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" ng-model="currentPage"
+						max-size="maxSize" class="pagination-sm pull-right no-margin bleach-background borderize" num-pages="numPages"
+						ng-change="setPage(currentPage)" items-per-page="pageSize"></uib-pagination> -->
+						
+						
+						<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" ng-change="setPage()"  class="pagination-sm pull-right no-margin bleach-background borderize" pull-right" items-per-page="pageSize"></pagination>
+				</div>
+
+<div class="form-inline col-md-3">
+<label>No. of items: </label><select class="form-control input-sm" name="pageSize"  ng-model="pageSize" ng-change="setSize(pageSize)" >
+							<option ng-repeat="p in pageSizeOptions" value="{{p}}"  >
+								{{p}}</option>
+						</select>
+
+</div>

@@ -1,0 +1,95 @@
+/*Design CSS Rules*/
+.toast {
+    color: #fff;
+    font-family: inherit;
+    text-align: center;
+    padding: 6px;
+    max-width: 400px;
+    background-color: #1c609c;
+    cursor: default;
+    font-size: 12px;
+    /*Customization*/
+    /*margin-top: 10px;*/    
+    border-radius: 2px !important;
+    box-shadow: 0px 1px 4px -2px #5F5F5F;
+}
+
+.below-header{
+    width: 30%;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    /*margin-top: -35px;*/
+}
+.toast-title {
+    font-size: 1.4em;
+    font-weight: 800;
+}
+
+.toast-info {
+    color: #ffffff;
+    background-color: #57A758;
+}
+
+.toast-warning {
+    color: #ffffff;
+    background-color: #F7BA51;
+}
+
+.toast-error {
+    color: #ffffff;
+    background-color: #C33535;
+}
+
+
+/*Position CSS rules*/
+.top-center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+
+.top-right {
+    position: absolute;
+    right: 0%;
+    top: 0%;
+}
+
+.top-left {
+    position: absolute;
+    left: 5%;
+    top: 10%;
+}
+
+.bottom-left {
+    position: absolute;
+    left: 0%;
+    bottom: 1%;
+}
+
+.bottom-right {
+    position: absolute;
+    right: 0%;
+    bottom: 1%;
+}
+
+.top-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-bottom {
+    width: 100% !important;
+    position: absolute;
+    bottom: 0;
+    max-width: 100%;
+}
+
+.page-top {
+    width: 100% !important;
+    position: absolute;
+    max-width: 100%;
+    top: 0;
+    height: 35px;
+    padding: 7px;
+}

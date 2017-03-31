@@ -1,0 +1,199 @@
+<div ng-controller="usergroupscontroller">
+
+	<div class="container">
+
+		<div class="page-header" id="page-header" data-original-title=""
+			title="">
+			<h4 class="ng-binding">Users</h4>
+		</div>
+
+
+		<div class="col-lg-8 table-responsive">
+
+
+
+
+			<div ng-show="users.length ==0 " class="alert alert-info"
+				role="alert" data-original-title="" title="">
+				<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;No
+				Users
+			</div>
+
+
+			<table ng-hide="users.length ==0 "
+				class="table table-hover table-condensed">
+				<thead>
+					<th>User Code</th>
+					<th>User Name</th>
+					<th>Status</th>
+					<th></th>
+				</thead>
+				<tbody ng-repeat="user in users">
+					<tr>
+						<td>{{user.userCode}}</td>
+						<td>{{user.username}}</td>
+						<td>{{user.userStatus}}</td>
+						<td><a role="button" ng-click="showGroup(user.id,$index)"
+							data-toggle="tooltip" data-placement="right"
+							title="Click here to  Add or Edit Group">Add/Edit</a></td>
+					</tr>
+
+				</tbody>
+			</table>
+
+
+
+
+		</div>
+
+
+		<div ng-show="showProfile" class="col-lg-4">
+
+
+
+			<form name="userProfile" ng-submit="addDomain()" novalidate>
+
+
+
+				
+
+				<div class="form-group required"
+					ng-class="isInvalid('userName',userProfile)">
+					<label for="userName" class="control-label"> User Name </label> <span
+						ng-show="userProfile.$submitted && userProfile.userName.$invalid">
+						<span style="top: 2px"
+						class="glyphicon glyphicon-remove-circle text-danger"
+						popover="User Code is required !" popover-trigger="mouseenter">
+					</span>
+					</span> <input class="form-control input-sm" ng-disabled="true"
+						name="userName" type="field" ng-model="userProfile.userName"
+						required placeholder="userName" />
+
+				</div>
+
+
+
+
+				<div class="form-group required"
+					ng-class="isInvalid('email',userProfile)">
+					<label for="userName" class="control-label"> Email </label> <span
+						ng-show="userProfile.$submitted && userProfile.email.$invalid">
+						<span style="top: 2px"
+						class="glyphicon glyphicon-remove-circle text-danger"
+						popover="Email is required !" popover-trigger="mouseenter">
+					</span>
+					</span> <input class="form-control input-sm" ng-disabled="viewOnly()"
+						name="email" type="field" ng-model="userprofile.email" required
+						placeholder="userName" />
+
+				</div>
+
+
+
+
+				<div class="form-group required"
+					ng-class="isInvalid('contactNo',userProfile)">
+					<label for="userName" class="control-label"> Contact No </label> <span
+						ng-show="userProfile.$submitted && userProfile.contactNo.$invalid">
+						<span style="top: 2px"
+						class="glyphicon glyphicon-remove-circle text-danger"
+						popover="Contact No is required !" popover-trigger="mouseenter">
+					</span>
+					</span> <input class="form-control input-sm" ng-disabled="viewOnly()"
+						name="contactNo" type="field" ng-model="userprofile.contactNo"
+						required placeholder="userName" />
+
+				</div>
+
+
+
+				<div class="form-group required"
+					ng-class="isInvalid('checkbox',userProfile)">
+					<label for="userName" class="control-label"> Groups </label>
+					<div class="form-group custom-checkbox">
+						<div ng-repeat="group in groups" class="checkbox inline">
+							<label><input type="checkbox" name="checkbox"
+								ng-click="toggleSelected(group.groupName)"
+								ng-checked="roles(group)||group.groupCode=='EMP'"
+								ng-disabled="group.groupCode=='EMP'">{{group.groupName}}</label>
+
+						</div>
+					</div>
+
+				</div>
+
+
+
+				<div class="form-group required"
+					ng-class="isInvalid('managers',userProfile)">
+					<label for="userName" class="control-label"> Manager </label>
+
+					<angucomplete-alt name="managers" id="managers"
+						 pause="100"
+						selected-object="userprofile.manager" return-original-object="true"
+						remote-url="admin/getManagers/?q={{managerRequest}}" 
+						remote-url-response-formatter="manager" search-fields="userName"
+						title-field="userName" minlength="1"
+						input-class="form-control form-control-small"
+						 match-class="highlight"  field-required-class="managers"/>
+
+				</div>
+
+
+
+<div class="form-group required"
+					ng-class="isInvalid('specialManagers',userProfile)">
+					<label for="userName" class="control-label">Special Manager </label>
+
+					<angucomplete-alt name="specialManagers" id="specialManagers"
+						 pause="100"
+						selected-object="userprofile.specialManager" return-original-object="true"
+						remote-url="admin/getManagers/?q={{managerRequest}}" 
+						remote-url-response-formatter="manager" search-fields="userName"
+						title-field="userName" minlength="1"
+						input-class="form-control form-control-small"
+						 match-class="highlight" field-required-class="specialManagers"  />
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+			
+				<div class="pull-right" ng-hide="viewOnly">
+					<div class="form-group ">
+						<button type="submit" class="btn btn-primary"
+							data-loading-text="Saving..." id="btnSave"
+							ng-click="addProfile()">
+							<span></span> Save
+						</button>
+
+						<a ng-hide="editMode" class="btn btn-danger" ng-click="cancel()">
+							<span></span> Cancel
+						</a>
+
+					</div>
+
+				</div>
+
+
+
+
+
+			</form>
+
+		</div>
+
+
+
+
+
+
+	</div>
+</div>

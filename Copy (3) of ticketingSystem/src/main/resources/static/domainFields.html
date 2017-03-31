@@ -1,0 +1,231 @@
+<div ng-controller="domainfieldscontroller">
+	<div class="col-md-10">
+		<div class="row margin-btm-lg">
+			<div class="col-md-4">
+				<input type="text" class="form-control pull-left" ng-model="search.searchStr" ng-change="searchResult()" placeholder="Search.."
+				/>
+				<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i> 			<i ng-if="search.searchStr != ''" ng-click="search.searchStr='';searchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+			</div>
+			<div class="col-md-8"> 			<button class="pull-right no-outline btn btn-link no-padding" ng-click="add()">
+		<i class="material-icons font-xlg">add_box</i> Add Field</button>
+		</div></div>
+	
+
+		<div class="row">
+			<div class="col-md-8">
+				<div ng-show="domainfields.length ==0" class="no-items-container">
+			<div class="no-items"><i class="material-icons">info</i> No Domain-Fields found</div>
+		</div>
+				<table ng-hide="domainfields.length ==0 " class="table table-hover table-responsive bleach-background borderize">
+					<thead>
+						<th>Domain</th>
+						<th>Field Label</th>
+						<th>Field Type</th>
+						<th>Status</th>
+						<th></th>
+
+					</thead>
+					<tbody>
+						<tr ng-click="view($index)" ng-repeat="domainfield in domainfields" class="pointer">
+							<td>{{domainfield.domain.domainDescription}}</td>
+							<td>{{domainfield.fieldLabel}}</td>
+							<td>{{domainfield.fieldType}}</td>
+							<td><label class="toggle-switch margin-right-lg">
+  <input type="checkbox" ng-model="domainfield.fieldStatus" data-target="#activate" data-toggle="modal" 
+  ng-click="saveFieldId(domainfield.id)" ng-checked="domainfield.fieldStatus == 'Active'" >
+  <div class="slider round"></div>
+</label></td>
+
+							<td>
+								<a role="button" ng-click="editDomainField(domainfield.id,$event)">
+									<i class="material-icons md-18 text-dark">edit</i></a>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+
+			<div class="col-md-4 bleach-background borderize">
+				<div class="padding-md border-bottom  clearfix  padding-btm-lg">
+					<a ng-class="{'invisible' : !viewOnly}" href="" ng-click="editable(domainfield.id,$event)" class="pull-right">
+						<i class="material-icons md-18 text-dark">edit</i></a>
+				</div>
+				<div ng-hide="showform" class="margin-lg">
+					<div class="text-dark text-center font-lg padding-lg">Click on a record to view details</div>
+				</div>
+				<form class="clearfix" ng-show="showform" name="domainfieldform" id="aeForm" ng-submit="addDomainField()" novalidate>
+
+
+					<div class="form-group required" ng-class="isInvalid('domain',domainfieldform)">
+						<label for="DesignationRole" class="control-label">Domain </label>
+						<span ng-show="domainfieldform.$submitted && domainfieldform.domain.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+						<input name="domain" ng-model="domainname" ng-disabled="viewOnly" typeahead-editable="false" typeahead-min-length="1" typeahead-on-select="selectItems.domainId($item)"
+							placeholder="Start typing to select domain.." autocomplete="off" uib-typeahead="x.domainDescription for x in fetchAutoCompleteResults.getDomains($viewValue)"
+							class="form-control" ng-required="true" />
+					</div>
+
+
+
+					<div class="form-group required" ng-class="isInvalid('fieldLabel',domainfieldform)">
+						<label for="fieldLabel" class="control-label">
+										Field Label </label>
+
+						<span ng-show="domainfieldform.$submitted && domainfieldform.fieldLabel.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Field Label is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+						<input class="form-control input-sm" ng-disabled="viewOnly" name="fieldLabel" type="field" ng-model="domainfield.fieldLabel"
+							required placeholder="Label to be displayed on the form" />
+					</div>
+
+
+
+					<div class="form-group required" ng-class="isInvalid('fieldName',domainfieldform)">
+						<label for="fieldName" class="control-label">
+										Field Name</label>
+
+						<span ng-show="domainfieldform.$submitted && domainfieldform.fieldName.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Field Name is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+
+						<input class="form-control input-sm" ng-disabled="viewOnly" name="fieldName" type="field" ng-model="domainfield.fieldName"
+							required placeholder="Field name is used internally" />
+					</div>
+
+
+
+
+
+					<div class="form-group required" ng-class="isInvalid('fieldType',domainfieldform)">
+						<label for="DesignationRole" class="control-label">
+									
+										Field Type </label>
+						<span ng-show="domainfieldform.$submitted && domainfieldform.fieldType.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Field Type is required !" popover-trigger="mouseenter">
+						</span>
+						</span> <select class="form-control input-sm" ng-disabled="viewOnly" name="fieldType" ng-model="domainfield.fieldType"
+							ng-change="checkIfList(domainfield.fieldType)" placeholder="fieldtype" required>
+							<option value="" disabled selected hidden>Choose Field Type</option>
+										<option ng-repeat="field in fieldTypes"
+											value="{{field.fieldtype}}">{{field.fieldtype}}</option>
+									</select>
+					</div>
+
+	<div class="form-group required" ng-if="checkIfList(domainfield.fieldType)" ng-class="isInvalid('listMaster',domainfieldform)">
+						<label for="DesignationRole" class="control-label">
+										List to be used</label>
+						<span ng-show="domainfieldform.$submitted && domainfieldform.listMaster.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover=" ListMaster is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+						<input name="listMaster" ng-model="listmastername" ng-disabled="viewOnly" typeahead-editable="false" typeahead-min-length="1"
+							typeahead-on-select="selectItems.listMasterId($item)" placeholder="Start typing to select List.." autocomplete="off" uib-typeahead="x.listMasterValue  for x in fetchAutoCompleteResults.getListMasters($viewValue)"
+							class="form-control" ng-required="true" />
+
+					</div>
+
+					<div class="form-group required" ng-class="isInvalid('type',domainfieldform)">
+						<label for="DesignationRole" class="control-label">Field Mandatory?</label>
+						<span ng-show="domainfieldform.$submitted && domainfieldform.type.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover=" Type is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+						<select class="form-control input-sm" name="type" ng-disabled="viewOnly" ng-model="domainfield.fieldEnum" placeholder="field"
+							required>
+							<option value="" disabled selected hidden>Please
+										Choose...</option>
+							<option  value="Mandatory">
+								Mandatory</option>
+								<option  value="Optional">
+								Optional</option>
+						</select>
+					</div>
+
+				
+
+					<div class="form-group required">
+						<label for="FieldDescription" class="normal-label">
+										 Placeholder Text - <span class="font-xs italicize">Optional</span></label> <input class="form-control input-sm" ng-disabled="viewOnly" type="field" ng-model="domainfield.fieldDescription"
+							placeholder="Used as field placeholder" />
+					</div>
+
+
+					<div ng-hide="viewOnly">
+						<div class="form-group pull-right">
+							<button type="submit" class="btn btn-primary" data-loading-text="Saving..." id="btnSave">Save</button>
+							<a class="btn btn-default" ng-click="cancel()">Cancel</a>
+						</div>
+
+					</div>
+
+
+					<div ng-if="viewOnly">
+						<div class="form-group pull-right">
+
+							<a class="btn btn-default" ng-click="cancel()">Close
+					</a>
+						</div>
+
+					</div>
+
+
+				</form>
+
+			</div>
+
+		</div>
+		<div ng-hide="domainfields.length==0">
+			<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" ng-change="setPage()"
+				class="pagination-sm no-margin bleach-background borderize" items-per-page="pageSize" ng-show="showPagination">
+				</pagination>
+		</div>
+	</div>
+
+	<!-- deactivating the field for domain -->
+	<div class="modal in" id="activate" role="dialog" data-backdrop="static">
+		<div class="modal-dialog " role="document">
+
+			<div class="modal-content">
+				<div class="modal-header font-lg text-strong">
+					Confirmation
+				</div>
+				<div class="modal-body">
+					<span class="modal-title">Are you sure
+							you want to {{domainfield.fieldStatus == 'Active' ? 'deactivate' : 'activate'}} the Field?</span>
+				</div>
+				<div class="modal-footer">
+					<div class="input-group pull-right">
+						<button type="button" class="btn btn-primary" data-loading-text="Sending..." ng-click="toggleStatus()">Yes</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="getFields()">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

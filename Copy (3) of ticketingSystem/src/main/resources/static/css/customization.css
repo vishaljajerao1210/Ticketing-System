@@ -1,0 +1,182 @@
+.navbar-default {
+    background-color: #00897B;
+    box-shadow: #7d7d7d 0px 1px 5px;
+    z-index: 1000;
+    border-radius: 0;
+}
+.navbar-default .navbar-brand,  .navbar-default .navbar-nav > li > a {
+    color: white;
+    padding: 15px 15px 13px 15px;
+    margin: 0px 5px;
+}
+ .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: white;
+     /*background-color: #00897B;*/
+     border-bottom: 2px solid white;
+}
+ .navbar-default .navbar-nav > li > a:hover {
+    color: white;
+     /*background-color: #26A69A;*/
+     border-bottom: 2px solid white;
+}
+
+.navbar-default .navbar-nav .dropdown > a:hover, .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    color: white;
+    background-color: #009688;
+    border : none;
+}
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+    color: white;
+    background-color: #009688;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white;
+}
+.menu-active{
+    border-bottom: 2px solid white;
+      /*background-color: #00897B;*/
+}  
+.dropdown-menu {
+    font-size : 13px;
+    right: 0;
+    left : initial;
+}
+.nested-menu-active
+{
+	  border-left: 4px solid #00897B;	
+}
+.nav-pills{
+        padding: 3px 0px;
+}
+.nav-pills > li.active >a, .nav-pills > li >a:hover, .nav-pills > li.active >a:focus, .nav-pills > li.active > a:hover {
+    color: inherit;
+    background-color: transparent;
+    border-left: 4px solid #009688; 
+    border-radius: 0px;     
+}
+.nav-pills > li >a{
+    color: inherit;
+    border-left: 4px solid white;
+    padding: 8px 15px;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    line-height: 2.5;
+}
+
+.custom-filter
+{
+	box-shadow:  0px 1px 1px  rgba(0, 0, 0, .05);
+	  background-color: #ffffff;
+}
+
+.form-control {
+    height: 30px;
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    border-radius : 0px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #e2e2e2;
+}
+.form-control:focus {
+    border-color: #009688;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.btn {
+    padding: 3px 14px;
+    border-radius: 2px;
+    font-size: inherit;
+}
+.btn-primary{
+    background-color: #00897B;
+   border-color : #00897B;
+}
+.btn-lg{
+        padding: 6px 12px;
+}
+.btn-link {
+    color: #4a4a4a;
+}
+.btn-primary:active:hover, .btn-primary:hover, .btn-primary.active:hover, .open > .dropdown-toggle.btn-primary:hover, .btn-primary:active:focus, .btn-primary.active:focus, .open > .dropdown-toggle.btn-primary:focus, .btn-primary:active.focus, .btn-primary.active.focus, .open > .dropdown-toggle.btn-primary.focus,.btn-primary:focus, .btn-primary.focus {
+    color: #fff;
+    background-color: #009688;
+    border-color : #009688;
+}
+.btn:focus, .btn:active:focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus {
+    outline: 0;
+}
+.input-group-addon {
+   
+    background-color: white;
+    border: 1px solid #E2E2E2;
+    border-radius: 0px;
+}
+.label {
+    padding: 2px 10px;
+    font-size: 75%;
+    font-weight: normal;
+    border-radius: 2px;
+}
+.label-default {
+    background-color: #e2e2e2;
+}
+.label-success {
+    background-color: #009688;
+}
+.modal-content{
+    border-radius: 2px;
+}
+.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
+        color: white;
+    background-color: #009688;
+}
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>.active>a,
+	.dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus {
+	color: #262626;
+	text-decoration: none;
+	background-color: #eee;
+}
+
+strong {
+    color: #bf1e1e;
+}
+.pagination {
+	/* margin: 13px 30px 0px 0px; */
+}
+
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover,
+	.pagination>.active>span:hover, .pagination>.active>a:focus,
+	.pagination>.active>span:focus {
+	color: #f7f7f7;
+	cursor: default;
+	background-color: #00897b;
+	border-color: transparent;
+	border-radius: 3px !important;
+}
+
+.pagination>li>a, .pagination>li>span {
+    padding: 3px 9px;
+    color: #2f323d;
+    border: 0 !important;
+    font-weight: bold;
+    background: transparent;
+    margin: 8px 3px;
+}
+
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover,
+	.pagination>.disabled>span, .pagination>.disabled>span:focus,
+	.pagination>.disabled>span:hover {
+	color: #777;
+	background-color: transparent;
+}
+.pagination-sm > li:first-child > a, .pagination-sm > li:first-child > span, .pagination-sm > li:last-child > a, .pagination-sm > li:last-child > span {
+font-size: 20px;
+    padding-top: 0;
+    padding-bottom: 2px;
+    margin-top: 4px;
+    margin-bottom: 0;
+
+}

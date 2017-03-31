@@ -1,0 +1,126 @@
+<div ng-controller="domainscontroller">
+	<div class="col-md-10">
+		<div class="row margin-btm-lg">
+			<div class="col-md-4">
+				<input type="text" class="form-control pull-left" ng-model="search.searchStr" ng-change="searchResult()" placeholder="Search.."/>
+				<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i> 			<i ng-if="search.searchStr != ''" ng-click="search.searchStr='';searchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+			</div>
+			<div class="col-md-8"> 			<button class="pull-right no-outline btn btn-link no-padding" ng-click="add()">
+		<i class="material-icons font-xlg">add_box</i> Add Domain</button>
+		</div>
+</div>
+		
+
+		<div class="row">
+			<div class="col-md-8">
+				<div ng-show="domains.length ==0 " class="no-items-container">
+			<div class="no-items"><i class="material-icons">info</i> No Domains found</div>
+		</div>
+				<table ng-hide="domains.length ==0 " class="table table-hover table-responsive bleach-background borderize">
+					<thead>
+						<th class="padding-left-lg">Domain</th>
+						<th>Category</th>
+						<th></th>
+					</thead>
+					<tbody>
+						<tr ng-click="viewDomain($index)" class="pointer" ng-repeat="domain in domains">
+							<td class="padding-left-lg">{{domain.domainDescription}}</td>
+							<td>{{domain.categories.categoryDescription}}</td>
+							<td style="width:10%">
+								<a role="button" ng-click="editDomain(domain.id,$event)" ><i class="material-icons md-18 text-dark">edit</i></a>
+							</td>
+
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+
+			<div class="col-md-4 bleach-background borderize">
+				<div class="padding-md border-bottom  clearfix  padding-btm-lg">
+					<a ng-class="{'invisible' : !viewOnly}" href="" ng-click="editable(domain.id,$event)" class="pull-right">
+						<i class="material-icons md-18 text-dark">edit</i></a>
+				</div>
+				<div ng-hide="showform" class="margin-lg">
+					<div class="text-dark text-center font-lg padding-lg">Click on a record to view details</div>
+				</div>
+				<form class="clearfix" ng-show="showform" name="domainform" ng-submit="addDomain()" novalidate>
+
+		<div class="form-group required" ng-class="isInvalid('category',domainform)">
+
+		<div class="form-group required" ng-class="isInvalid('domain',domainform)">
+						<label for="userName" class="control-label">
+						 							Domain Name</label>
+						<span ng-show="domainform.$submitted && domainform.domain.$invalid"> 
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Domain is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+
+						<input class="form-control input-sm" ng-disabled="viewOnly" autocomplete="off" name="domain" type="field" ng-model="domain.domainDescription"
+							ng-change="checkvalid(domain.domainDescription)" required placeholder="Domain Name" />
+						<div ng-show="domainform.domain.$error.duplicateValue" class="text-error padding-sm" ><i class="material-icons md-18">error</i> Domain already exists.</div>
+					</div>
+
+
+						<label for="Category" class="control-label"> Category </label>
+
+						<span ng-show="domainform.$submitted && domainform.category.$invalid">  
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Category is required !" popover-trigger="mouseenter">
+						</span>
+						</span>
+
+						<input name="category" ng-model="categoryname" ng-blur="checkvalid(domain.domainDescription)" ng-disabled="viewOnly" typeahead-editable="false" typeahead-min-length="1"
+							typeahead-on-select="selectedItem($item)" placeholder="Start typing to select category.." autocomplete="off" uib-typeahead="x.categoryDescription for x in getCategories($viewValue)"
+							class="form-control" ng-required="true" />
+					</div>
+
+			
+
+
+
+
+
+
+			
+
+
+
+
+					<div ng-hide="viewOnly">
+						<div class="form-group pull-right">
+							<button type="submit" class="btn btn-primary" data-loading-text="Saving..." id="btnSave">
+													Save
+												</button>
+							<a class="btn btn-default" ng-click="cancel()">Cancel
+							</a>
+						</div>
+
+					</div>
+					<div ng-if="viewOnly">
+						<div class="form-group pull-right">
+							<a class="btn btn-default" ng-click="cancel()">Close
+												</a>
+						</div>
+
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+
+		<div ng-hide="domains.length==0">
+			<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" ng-change="setPage()"
+				class="pagination-sm no-margin bleach-background borderize" items-per-page="pageSize" ng-show="showPagination">
+				</pagination>
+		</div>
+	</div>
+</div>

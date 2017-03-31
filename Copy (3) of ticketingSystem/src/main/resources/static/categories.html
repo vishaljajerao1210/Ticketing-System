@@ -1,0 +1,102 @@
+<div ng-controller="categoriescontroller">
+	
+	<div class="col-md-10">
+		<div class="row margin-btm-lg">
+		<div class="col-md-4">
+			<input type="text" class="form-control pull-left" ng-model="search.searchStr" ng-change="searchResult()" placeholder="Search.."/>
+			<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i> 			
+			<i ng-if="search.searchStr != ''" ng-click="search.searchStr = '';searchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+			
+			</div> 
+			<div class="col-md-8">
+			<button class="pull-right no-outline btn btn-link no-padding" ng-click="add()"><i class="material-icons font-xlg">add_box</i> Add Category</button>
+		</div>
+		</div>
+
+		
+
+<div class="row">
+	<div class="col-md-8">
+		<div ng-show="categories.length ==0 " class="no-items-container">
+			<div class="no-items"><i class="material-icons">info</i> No Categories found</div>
+		</div>
+		<table ng-hide="categories.length==0 " class="table table-hover table-responsive bleach-background borderize">
+			<thead>
+				<th class="padding-left-lg">Category</th>
+				<th></th>
+			</thead>
+			<tbody>
+				<tr ng-click="viewCategory(category)" class="pointer" ng-repeat="category in categories">
+					<td class="padding-left-lg">{{category.categoryDescription}}</td>				
+					<td style="width:10%">
+						<a role="button" ng-click="editCategory(category.id,$event)" ><i class="material-icons md-18 text-dark">edit</i></a>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+
+
+	
+	<div class="col-md-4 bleach-background borderize" >
+<div class="padding-md border-bottom  clearfix  padding-btm-lg"><a ng-class="{'invisible' : !viewOnly}" href="" ng-click="editable(category.id,$event)" class="pull-right" >
+	<i class="material-icons md-18 text-dark">edit</i></a></div> 
+<div ng-hide="showform" class="margin-lg">
+			<div class="text-dark text-center font-lg padding-lg">Click on a record to view details</div>
+		</div>
+
+		<form class="clearfix" ng-show="showform" name="categoryform" id="aeForm" novalidate>
+
+
+
+			<div class="form-group required" ng-class="isInvalid('category',categoryform)">
+				<label for="userName" class="control-label"> Category Name</label>
+
+
+				<span ng-show="categoryform.$submitted && categoryform.category.$invalid">  
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="Category is required !" popover-trigger="mouseenter">
+						</span>
+				</span>
+
+
+
+				<input class="form-control input-sm" name="category" type="field" ng-model="category.categoryDescription" ng-disabled="viewOnly"
+					ng-change="checkvalid(category.categoryDescription)" required placeholder="Category Name" />
+				<div ng-show="invalid"  class="text-error padding-sm"><i class="material-icons md-18">error</i> Category already exists.</div>
+			</div>
+
+
+
+			<div class="pull-right" ng-hide="viewOnly">
+				<div class="form-group ">
+					<button type="submit" class="btn btn-primary" data-loading-text="Saving..." id="btnSave"  ng-click="addCategory(categoryform)">Save</button>
+					<button class="btn btn-default" ng-click="cancel()">Cancel</button>			
+				</div>
+			</div>
+
+			<div ng-if="viewOnly" class="pull-right">
+				<div class="form-group">
+					<button class="btn btn-default" ng-click="cancel()">Close
+					</button>
+				</div>
+
+			</div>
+
+		</form>
+
+	</div>
+</div>
+	
+
+		<div  ng-hide="categories.length==0">
+			<uib-pagination  force-ellipses="true" rotate="true" boundary-link-numbers="true"next-text="&rsaquo;" previous-text="&lsaquo;"  total-items="totalItems" rotate="true" boundary-link-numbers="true"  max-size="maxSize" ng-model="currentPage" ng-change="setPage()"
+				class="pagination-sm no-margin bleach-background borderize" items-per-page="pageSize" ng-show="showPagination">
+				</pagination>
+		</div>
+</div>
+</div>

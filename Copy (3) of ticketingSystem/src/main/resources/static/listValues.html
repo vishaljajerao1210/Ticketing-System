@@ -1,0 +1,132 @@
+<div ng-controller="listvaluecontroller">
+<div class="col-md-10">
+	<div class="row margin-btm-lg">
+		<div class="col-md-12">
+		<a href="#/master/listmasters" > <i class="material-icons md-18">chevron_left</i>Back to Lists</a></div>
+		<div class="col-md-4 font-lg margin-top-sm">Values of list - {{listMaster.listMasterValue}}</div>
+		<div class="col-md-4">
+			<input type="text" class="form-control pull-left" ng-model="search.searchStr" ng-change="searchResult()" placeholder="Search.." />
+			<i ng-if="search.searchStr == ''" class="material-icons md-18 inline-icon text-gray">search</i> 			<i ng-if="search.searchStr != ''" ng-click="search.searchStr='';searchResult()" class="material-icons md-18 inline-icon text-gray pointer">clear</i>
+		</div>
+				<div class="col-md-4"> 			<button class="pull-right no-outline btn btn-link no-padding" ng-click="add()">
+		<i class="material-icons font-xlg">add_box</i> Add Values</button>
+		</div>
+</div>
+		
+			<div class="row">
+	<div class="col-md-8">
+		<div ng-show="listvalues.length ==0 " class="no-items-container" class="no-items-container">
+			<div class="no-items"><i class="material-icons">info</i> No values found for list '{{listMaster.listMasterValue}}' </div>
+		</div>
+
+		<table ng-hide="listvalues.length ==0 " class="table table-hover table-responsive bleach-background borderize">
+			<thead>	
+				<th>Value Displayed</th>
+				<th>Value Stored</th>
+				<th>Description</th>
+				<th>Edit</th>
+			</thead>
+			<tbody >
+				<tr ng-click="view($index)" class="pointer" ng-repeat="list in listvalues">
+					<td>{{list.listItemDisplayValue}}</td>
+					<td>{{list.listItemStorageValue}}</td>
+					<td  class="padding-right-lg">{{list.listItemDescription == null ? '-' : list.listItemDescription}}</td>
+					<td>
+						<a role="button" ng-click="editListValue(list.id,$event)" data-toggle="tooltip" data-placement="right" title="Click here to edit List Values"><i class="material-icons md-18 text-dark">edit</i></a>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+
+<div class="col-md-4 bleach-background borderize" >
+		<div class="padding-md border-bottom  clearfix  padding-btm-lg">
+			<a ng-class="{'invisible' : !viewOnly}" href="" ng-click="editable(listvalue.id,$event)" class="pull-right" >
+	<i class="material-icons md-18 text-dark">edit</i></a></div> 
+	<div ng-hide="showform" class="margin-lg"> 			
+		<div class="text-dark text-center font-lg padding-lg">Click on a record to view details</div> 		</div>
+		<form class="clearfix" ng-show="showform" name="listvalueform" id="aeForm" ng-submit="addListValue()" novalidate>
+
+			<!--<div class="form-group required" ng-class="isInvalid('listmaster',listvalueform)">
+				<label for="DesignationRole" class="control-label"> List Masters </label>
+				<span ng-show="listvalueform.$submitted && listvalueform.listmaster.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="List Master Value is required !" popover-trigger="mouseenter">
+						</span>
+				</span>
+	<input name="listmaster"  ng-model="listmastervalue" ng-disabled="viewOnly"	
+						typeahead-editable="false" typeahead-min-length="1"
+						typeahead-on-select="selectItems.listMasterId($item)"
+						placeholder="Start typing to select domain.."
+						autocomplete="off" uib-typeahead="x.listMasterValue for x in fetchAutoCompleteResults.getListMasters($viewValue)"
+						class="form-control"  ng-required="true"/>
+			
+			</div>-->
+
+
+			<div class="form-group required" ng-class="isInvalid('listitemdisplay',listvalueform)">
+				<label for="userName" class="control-label">
+						 							Value Displayed</label>
+
+				<span ng-show="listvalueform.$submitted && listvalueform.listitemdisplay.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="List Item Display Value is required !" popover-trigger="mouseenter">
+						</span>
+				</span>
+				<input class="form-control input-sm" ng-disabled="viewOnly" name="listitemdisplay" type="field" ng-model="listvalue.listItemDisplayValue"
+					required placeholder="Value displayed as option" />
+			</div>
+
+				<div class="form-group required" ng-class="isInvalid('listitemstorage',listvalueform)">
+				<label for="userName" class="control-label">
+						 							Value Stored</label>
+				<span ng-show="listvalueform.$submitted && listvalueform.listitemstorage.$invalid">
+						<span
+							style="top: 2px"
+							class="glyphicon glyphicon-remove-circle text-danger"
+							popover="List Item Storage Value is required !" popover-trigger="mouseenter">
+						</span>
+				</span>
+				<input class="form-control input-sm" name="listitemstorage" type="field" ng-disabled="viewOnly" ng-model="listvalue.listItemStorageValue"
+					required placeholder="Value stored when selected" />
+
+			</div>
+
+
+			<div class="form-group">
+				<label for="userName" class="normal-label">
+						 							Description - <span class="font-xs italicize">Optional</span> </label> <input class="form-control input-sm" ng-disabled="viewOnly" name="listmastervalue"
+					type="field" ng-model="listvalue.listItemDescription" placeholder="Description" />
+
+			</div>
+
+
+			<div ng-hide="viewOnly">
+				<div class="form-group pull-right">
+					<button type="submit" class="btn btn-primary" data-loading-text="Saving..." id="btnSave">
+													 Save
+												</button>
+					<a class="btn btn-default" ng-click="cancel()">Cancel
+												</a>
+				
+				</div>
+
+			</div>
+
+			<div ng-if="viewOnly">
+				<div class="form-group pull-right">
+					<a class="btn btn-default" ng-click="cancel()">Close
+												</a>
+				</div>
+
+			</div>
+		</form>
+	</div>
+</div>
+	</div>

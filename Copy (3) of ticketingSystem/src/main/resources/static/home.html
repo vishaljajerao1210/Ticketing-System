@@ -1,0 +1,91 @@
+<div ng-controller="homeController">
+<div ng-show="authenticated" class="">
+<div>
+<div class="flex-container dashboard-count-container">
+<div class="count-card borderize bleach-background no-padding subtle-shadow">
+	<div class="padding-top-md padding-btm-md text-center" style="background-color:#ECECEC">My Tickets</div>
+	<div class="padding-lg">
+		<div class="pull-left half-width text-center border-right" style="font-size:22px">{{dashboardStats.pendingTickets}}
+			<div class="text-uppercase font-xs  text-strong">pending</div></div>
+		<div class="pull-left half-width text-center" style="font-size:22px">{{dashboardStats.resolvedTickets}}
+			<div class="text-uppercase font-xs  text-strong">completed</div></div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+
+<div class="count-card borderize bleach-background no-padding subtle-shadow">
+	<div class="padding-top-md padding-btm-md text-center" style="background-color:#ECECEC">My Tasks</div>
+	<div class="padding-lg">
+		<div class="pull-left half-width text-center border-right" style="font-size:22px">{{dashboardStats.pendingTasks}}
+			<div class="text-uppercase font-xs  text-strong">pending</div></div>
+		<div class="pull-left half-width text-center" style="font-size:22px">{{dashboardStats.completedTasks}}
+			<div class="text-uppercase font-xs  text-strong">completed</div></div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+
+<div class="count-card borderize bleach-background no-padding subtle-shadow">
+	<div class="padding-top-md padding-btm-md text-center" style="background-color:#ECECEC">My Actionables</div>
+	<div class="padding-lg">
+		<div class="pull-left half-width text-center border-right" style="font-size:22px">{{dashboardStats.unclaimedTasks}}
+			<div class="text-uppercase font-xs  text-strong">pending</div></div>
+		<div class="pull-left half-width text-center" style="font-size:22px">-
+			<div class="text-uppercase font-xs  text-strong">completed</div></div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+</div>
+
+
+<div class="flex-container">	
+<div class="dashboard-task-container borderize subtle-shadow bleach-background inline-block" >
+	<div class="border-bottom" style="padding:10px 20px;">
+		<span class="pull-left text-strong">My Tasks</span>
+		<a href="#/personaltasks" class="pull-right"> View All </a>
+		<div style="clear:both"></div>
+	</div>
+	<div ng-show="personalTasks.length == 0" class="margin-top-lg no-items"><i class="material-icons">done_all</i> All Done !</div>
+	<div class="padding-md padding-left-lg padding-right-lg border-bottom" ng-repeat="personalTask in personalTasks | limitTo: 4">
+	<div class="clearfix">	
+		<div class="text-strong pull-left"  ># {{personalTask.id}}</div>
+		<div class="text-right font-small pull-right"  >
+			<i class="material-icons md-18 text-dark">{{personalTask.currentGroupMaster.groupName != null? 'supervisor_account' : 'person'}}</i>
+			{{personalTask.currentGroupMaster.groupName==null? 'Personal Task' : personalTask.currentGroupMaster.groupName}}</div>
+	</div>
+		<div class="font-xs text-gray italicize padding-btm-md">{{personalTask.categories.categoryDescription}} > 
+			{{personalTask.domains.domainDescription}} > {{personalTask.subdomain.subDomainDescription}} </div>
+		<div class="text-dark font-small clearfix">
+			<div class="pull-left" >{{personalTask.raisedDate | date:"fullDate"}} </div>
+			
+			<div class="pull-right" ><a href="#/personaltasks/{{personalTask.id}}">View</a></div>
+		</div>
+	</div>
+</div>
+	
+		
+<div class="dashboard-task-container borderize subtle-shadow bleach-background inline-block" >
+	<div class="border-bottom" style="padding:10px 20px;">
+		<span class="pull-left text-strong">My Actionables</span>
+		<a href="#/myactionables" class="pull-right"> View All </a>
+		<div style="clear:both"></div>
+	</div>
+	<div ng-show="groupTasks.length == 0" class="margin-top-lg no-items"><i class="material-icons">done_all</i> All Done !</div>
+	<div class="padding-md padding-left-lg padding-right-lg border-bottom" ng-repeat="groupTask in groupTasks | limitTo: 4">
+	<div class="clearfix">	
+		<div class="text-strong pull-left"># {{groupTask.id}}</div>
+		<div class="text-right font-small pull-right"  ><i class="material-icons md-18 text-dark">supervisor_account</i>
+			{{groupTask.currentGroupMaster.groupName}}</div>
+	</div>
+		<div class="font-xs text-gray italicize padding-btm-md">{{groupTask.categories.categoryDescription}} > 
+			{{groupTask.domains.domainDescription}} > {{groupTask.subdomain.subDomainDescription}} </div>
+		<div class="text-dark font-small clearfix">
+			<div class="pull-left" >{{groupTask.raisedDate | date:"fullDate"}} </div>
+			
+			<div class="pull-right" ><a href="#/myactionables/{{groupTask.id}}?group={{groupTask.currentGroupMaster.id}}" >View</a></div>
+		</div>
+	</div>
+</div>
+	
+</div>
+</div>
+</div>

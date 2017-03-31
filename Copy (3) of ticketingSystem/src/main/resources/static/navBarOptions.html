@@ -1,0 +1,6 @@
+	 <div class="bleach-background borderize subtle-shadow" >
+<ul class="nav nav-pills nav-stacked custom-filter" id="groupTab" >    
+    <li ng-repeat="option in getOptions"  ng-class="{ 'active' : isActive('{{option.sref}}') }">
+      <a ui-sref="{{option.sref}}" >{{option.name}}</a> </li>
+  </ul>
+  </div>
